@@ -25,8 +25,8 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
-      case TargetPlatform.iOS:
-        return ios;
+      // case TargetPlatform.iOS:
+      //   return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAJm8Hzk6AJ5qP3bQi4FU2K73SrRuuoZIg',
-    appId: '1:1051157177346:android:cb372c893c058c9cccf31b',
+    apiKey: 'AIzaSyCsOFhcJthdacVOfTC3S48X_4puMcFEmR4',
+    appId: '1:1078427920911:android:0ad0bee82749e766eb917a',
     messagingSenderId: '1051157177346',
-    projectId: 'waterapp-1520b',
-    storageBucket: 'waterapp-1520b.appspot.com',
+    projectId: 'mamas-milk',
+    storageBucket: 'mamas-milk.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDUZhk1-n3Soi1L58bcORhIJFkC6ziArqg',
-    appId: '1:1051157177346:ios:669a1656a45992aeccf31b',
-    messagingSenderId: '1051157177346',
-    projectId: 'waterapp-1520b',
-    storageBucket: 'waterapp-1520b.appspot.com',
-    iosClientId: '1051157177346-6mnudi4m3aigfj97ka87r461krvppfkn.apps.googleusercontent.com',
-    iosBundleId: 'com.dome.water',
-  );
+  // static const FirebaseOptions ios = FirebaseOptions(
+  //   apiKey: 'AIzaSyDUZhk1-n3Soi1L58bcORhIJFkC6ziArqg',
+  //   appId: '1:1051157177346:ios:669a1656a45992aeccf31b',
+  //   messagingSenderId: '1051157177346',
+  //   projectId: 'waterapp-1520b',
+  //   storageBucket: 'waterapp-1520b.appspot.com',
+  //   iosClientId: '1051157177346-6mnudi4m3aigfj97ka87r461krvppfkn.apps.googleusercontent.com',
+  //   iosBundleId: 'com.dome.water',
+  // );
 }

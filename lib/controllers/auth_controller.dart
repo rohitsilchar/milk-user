@@ -34,20 +34,20 @@ class AuthController extends ControllerMVC {
   UserModel? userModel;
 
 //  UserModel userModel = UserModel();
- // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   String _verificationId = "";
   int? _resendToken;
 
   Future<bool> resendOTP({required String phone}) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: "+91"+phone,
+      phoneNumber: "+91" + phone,
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) async {
         _verificationId = verificationId;
         _resendToken = resendToken;
-        commonAlertNotification('',message: "OTP Sent");
+        commonAlertNotification('', message: "OTP Sent");
       },
       timeout: const Duration(seconds: 120),
       forceResendingToken: _resendToken,
@@ -66,60 +66,61 @@ class AuthController extends ControllerMVC {
     print("numberController ${numberController.text}");
 
     if (numberController.text.trim().isNotEmpty) {
-    
       if (numberController.text.length >= 8) {
-      showLoader();
-      var num = numberController.text.trim();
+        showLoader();
+        var num = numberController.text.trim();
 
-      userRepo.userLogin(num).then((value) async {
-        if (value.success!) {
-          loginData = LoginData.fromJson(value.data);
-         
-         
-          if(isfirebase == true){
-          await FirebaseAuth.instance.verifyPhoneNumber(
-                phoneNumber: '+91'+num,
+        userRepo.userLogin(num).then((value) async {
+          if (value.success!) {
+            loginData = LoginData.fromJson(value.data);
+
+            if (isfirebase == true) {
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                phoneNumber: '+91' + num,
                 verificationCompleted: (PhoneAuthCredential credential) {
-                 // commonAlertNotification("",message: UtilsHelper.getString(null, 'Logged In Successfully'));
+                  // commonAlertNotification("",message: UtilsHelper.getString(null, 'Logged In Successfully'));
                 },
                 verificationFailed: (FirebaseAuthException e) {
-                   hideLoader();
+                  hideLoader();
                   commonAlertNotification("",
-                      message:UtilsHelper.getString(null, e.message.toString()));
+                      message:
+                          UtilsHelper.getString(null, e.message.toString()));
                 },
                 timeout: Duration(milliseconds: 120),
                 codeSent: (String verificationId, int? resendToken) {
-                   hideLoader();
+                  hideLoader();
                   Navigator.of(context).pushNamed(
                     RoutePath.enter_otp,
-                    arguments: [verificationId,num],
+                    arguments: [verificationId, num],
                   );
                 },
                 codeAutoRetrievalTimeout: (String verificationId) {},
               );
+            } else {
+              hideLoader();
+              commonAlertNotification("",
+                  message:
+                      UtilsHelper.getString(null, 'Logged In Successfully'));
+              Navigator.of(context)
+                  .pushNamed(RoutePath.enter_otp, arguments: [num]);
+            }
           } else {
-             hideLoader();
-             commonAlertNotification("",message: UtilsHelper.getString(null, 'Logged In Successfully'));
-              Navigator.of(context).pushNamed(RoutePath.enter_otp, arguments: [num]);
+            commonAlertNotification("",
+                message: UtilsHelper.getString(null, value.toString()));
           }
-        } else {
-          commonAlertNotification("",
-              message: UtilsHelper.getString(null, value.toString()));
-        }
-      }).catchError((e) {
+        }).catchError((e) {
+          hideLoader();
+          commonAlertNotification("Error",
+              message: UtilsHelper.getString(null, "something_went_wrong"));
+        }).whenComplete(() {
+          // hideLoader();
+        });
+      } else {
         hideLoader();
-        commonAlertNotification("Error",
-            message: UtilsHelper.getString(null, "something_went_wrong"));
-      }).whenComplete(() {
-        // hideLoader();
-      });
-      }else{
-         hideLoader();
-       commonAlertNotification("Error",
-          message:'Enter at least 8 digits');
+        commonAlertNotification("Error", message: 'Enter at least 8 digits');
       }
     } else {
-       hideLoader();
+      hideLoader();
       commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "please_enter_mobile_number"));
     }
@@ -130,73 +131,77 @@ class AuthController extends ControllerMVC {
     FocusScope.of(context).unfocus();
     print("otp $otp");
 
-    if ( (otp.isNotEmpty && isfirebase == true && otp.length == 6) || otp.isNotEmpty && otp.length == 4) {
+    if ((otp.isNotEmpty && isfirebase == true && otp.length == 6) ||
+        otp.isNotEmpty && otp.length == 4) {
       showLoader();
       if (isfirebase == true) {
-       await signInFirebase(otp, verificationCode, context).then((value)async{
-         if (value == true) {
+        await signInFirebase(otp, verificationCode, context)
+            .then((value) async {
+          if (value == true) {
             await verifyNonFirebase(phone, otp, context);
           }
-       });
-      } else { 
+        });
+      } else {
         verifyNonFirebase(phone, otp, context);
       }
     } else {
-       hideLoader();
+      hideLoader();
       commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "please_enter_otp_properly"));
     }
   }
 
-  Future verifyNonFirebase(String phone, String otp, BuildContext context)async {
-     userRepo.verifyOTP(phone: phone,token: appState.deviceTokenId,otp: otp).then((value) {
+  Future verifyNonFirebase(
+      String phone, String otp, BuildContext context) async {
+    userRepo
+        .verifyOTP(phone: phone, token: appState.deviceTokenId, otp: otp)
+        .then((value) {
       if (value.success!) {
         verifyOTPData = VerifyOTPData.fromJson(value.data);
         appState.apiToken = verifyOTPData!.apiToken!;
         userGetProfileCall(context).then((value) {
-            hideLoader();
-            commonAlertNotification("",message: UtilsHelper.getString(null, 'Logged In Successfully'));
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                RoutePath.home_screen, (Route<dynamic> route) => false);
-          }).catchError((e) {
-             hideLoader();
-             print(e);
-          });
-        
+          hideLoader();
+          commonAlertNotification("",
+              message: UtilsHelper.getString(null, 'Logged In Successfully'));
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              RoutePath.home_screen, (Route<dynamic> route) => false);
+        }).catchError((e) {
+          hideLoader();
+          print(e);
+        });
       } else {
         /// print(e);
-          hideLoader();
+        hideLoader();
         commonAlertNotification("Error",
             message: UtilsHelper.getString(null, "something_went_wrong"));
       }
     }).catchError((e) {
       hideLoader();
-       print(e);
+      print(e);
       commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "something_went_wrong"));
-    }).whenComplete(() {
-     
-    });
+    }).whenComplete(() {});
   }
 
-  Future<bool> signInFirebase(String otp, String verificationCode, BuildContext context) async{
-     FirebaseAuth auth = FirebaseAuth.instance;
+  Future<bool> signInFirebase(
+      String otp, String verificationCode, BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
     var smsCode = otp;
     var _credential = PhoneAuthProvider.credential(
         verificationId: verificationCode.toString(), smsCode: smsCode);
-                
-  return auth.signInWithCredential(_credential).then((result) {
-     //hideLoader();
-     return true;
-    //  commonAlertNotification("",message: UtilsHelper.getString(null, 'Logged In Successfully'));
-    //  Navigator.of(context).pushNamedAndRemoveUntil(
-    //      RoutePath.home_screen, (Route<dynamic> route) => false);
-     }).catchError(( e){
-        hideLoader();
-         commonAlertNotification("Error",
+
+    return auth.signInWithCredential(_credential).then((result) {
+      //hideLoader();
+      return true;
+      //  commonAlertNotification("",message: UtilsHelper.getString(null, 'Logged In Successfully'));
+      //  Navigator.of(context).pushNamedAndRemoveUntil(
+      //      RoutePath.home_screen, (Route<dynamic> route) => false);
+    }).catchError((e) {
+      hideLoader();
+      commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "something_went_wrong"));
-        return false;
-     });
+      return false;
+    });
   }
 
   void userResendOtpApiCall(BuildContext context, String phone) async {
@@ -205,9 +210,9 @@ class AuthController extends ControllerMVC {
     showLoader();
     userRepo.userResendOtp(phone).then((value) {
       if (value.success!) {
-        // resendOTP(phone: '+91' + phone).then((value) => 
-        commonAlertNotification(
-            "Success",message: UtilsHelper.getString(null, "resend_otp_successfully"));
+        // resendOTP(phone: '+91' + phone).then((value) =>
+        commonAlertNotification("Success",
+            message: UtilsHelper.getString(null, "resend_otp_successfully"));
       } else {
         commonAlertNotification("Error",
             message: UtilsHelper.getString(null, "something_went_wrong"));
@@ -336,11 +341,10 @@ class AuthController extends ControllerMVC {
     });
   }
 
-
   Future<void> notificationInit() async {
     await Firebase.initializeApp();
     //appState.deviceTokenId = (await _firebaseMessaging.getToken())!;
-    print("tokenId $appState.deviceTokenId");
+    print("tokenId ${appState.deviceTokenId}");
     // Set the background messaging handler early on, as a named top-level function
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -349,7 +353,6 @@ class AuthController extends ControllerMVC {
         'high_importance_channel', // id
         'High Importance Notifications', // title // description
         importance: Importance.high,
-        
       );
 
       flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -394,8 +397,7 @@ class AuthController extends ControllerMVC {
             notification.title,
             notification.body,
             NotificationDetails(
-                android: AndroidNotificationDetails(
-                    channel!.id, channel!.name, 
+                android: AndroidNotificationDetails(channel!.id, channel!.name,
                     icon: 'ic_launcher',
                     playSound: true,
                     priority: Priority.high,

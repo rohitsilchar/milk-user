@@ -1,10 +1,13 @@
 class Urls {
-  static String waterUrl ="https://stagincite.technofox.co.in/waterapp_1.3_version/";
+  static String waterUrl =
+      "https://stagincite.technofox.co.in/waterapp_1.3_version/";
   // "https://water.fluttertop.com/";
 
-  static String basicUrl = "https://stagincite.technofox.co.in/waterapp_1.3_version/";
+  static String basicUrl =
+      "https://stagincite.technofox.co.in/waterapp_1.3_version/";
   // 'https://stagincite.technofox.co.in/Waterapp_11_Jan_2024/';
-  static String baseUrl = '${basicUrl}api/';
+  // static String baseUrl = '${basicUrl}api/';
+  static String baseUrl = "https://gitcsdemoserver.online/mamasmilk/api/";
   static String productImageBaseUrl = "${basicUrl}app-assets/images/products/";
   static String bannerImageBaseUrl = "${basicUrl}app-assets/images/banners/";
   static String offerImageBaseUrl = "${basicUrl}app-assets/images/coupons/";

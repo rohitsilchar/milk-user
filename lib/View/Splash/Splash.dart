@@ -22,8 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    super.initState();
     localDataStorage = LocalDataStorage();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      print("Splash Screen");
+      print(get.hasData('url').toString());
+      print(get.read('url').toString());
       // Future.delayed(const Duration(milliseconds: 2000), () async {
       await settingRepo.initSettings().then((value) async {
         if (get.hasData("language")) {
@@ -49,13 +53,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 RoutePath.home_screen, (Route<dynamic> route) => false);
           }
         } else {
+          print("I am Here");
           Navigator.of(context).pushNamedAndRemoveUntil(
               RoutePath.selectLanguage, (Route<dynamic> route) => false);
         }
       });
       // });
     });
-    super.initState();
   }
 
   @override
@@ -90,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  "assets/icon/appicon.png",
+                  "assets/icon/appicon.jpg",
                   width: 200,
                   height: 200,
                 ),

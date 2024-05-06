@@ -98,7 +98,6 @@ class MyColor {
   static const Color _d_text_primary_light_color = Color(0xFFFFFFFF);
   static const Color _d_text_primary_dark_color = Color(0xFFFFFFFF);
 
-
   static const Color _d_divider_color = Color(0x1FFFFFFF);
 
   ///
@@ -121,7 +120,7 @@ class MyColor {
   static const Color _c_blue_color = Color.fromRGBO(20, 161, 167, 1);
   static const Color _c_transparent_color = Colors.transparent;
 
-  static Color lightShimmerBaseColor =  Colors.grey[200]!;
+  static Color lightShimmerBaseColor = Colors.grey[200]!;
   static Color lightShimmerHighlightColor = Colors.grey[300]!;
 
   static void loadColor(BuildContext context) {
@@ -153,9 +152,9 @@ class MyColor {
     mainDarkColor = _c_main_dark_color;
     mainLightColor = _c_main_light_color;
     mainLightColorWithBlack = _d_base_color;
-    darkModeLightcolor =Color.fromRGBO(63, 76, 84, 1);
+    darkModeLightcolor = Color.fromRGBO(63, 76, 84, 1);
 
-    lightShimmerBaseColor =  const Color.fromARGB(255, 66, 66, 66);
+    lightShimmerBaseColor = const Color.fromARGB(255, 66, 66, 66);
     lightShimmerHighlightColor = const Color.fromARGB(255, 53, 53, 53);
     mainLightColorWithWhite = Colors.white;
     mainShadowColor = Colors.white12;
@@ -184,7 +183,8 @@ class MyColor {
     aboutUsDescription = _d_text_primary_light_color;
     yourOrder = _d_text_primary_light_color;
     commonColorSet1 = Color.fromRGBO(6, 40, 61, 1);
-    commonColorSet2 = Color.fromRGBO(175, 122, 179, 1);
+    // commonColorSet2 = Color.fromRGBO(175, 122, 179, 1);
+    commonColorSet2 = Color(0xFF359ed8);
     timeFrameColor = _d_text_primary_light_color;
     commonTitleColor = Colors.white;
     subTitle = Colors.white;
@@ -230,7 +230,7 @@ class MyColor {
     mainShadowColor = _c_main_color.withOpacity(0.6);
     mainLightShadowColor = _c_main_light_color;
     mainDividerColor = _l_divider_color;
-    darkModeLightcolor =Color.fromRGBO(63, 76, 84, 1) ;
+    darkModeLightcolor = Color.fromRGBO(63, 76, 84, 1);
     whiteColorWithBlack = _c_white_color;
     descriptionColor = Colors.black.withOpacity(0.6);
     rowDescription = Color(0xFF748A9D);
@@ -238,7 +238,8 @@ class MyColor {
     aboutUsDescription = Color(0xFF748A9D);
     yourOrder = Color(0xFF748A9D);
     commonColorSet1 = Color.fromRGBO(6, 40, 61, 1);
-    commonColorSet2 = Color.fromRGBO(175, 122, 179, 1);
+    // commonColorSet2 = Color.fromRGBO(175, 122, 179, 1);
+    commonColorSet2 = Color(0xFF359ed8);
     commonTitleColor = Color.fromRGBO(6, 40, 61, 1);
     subTitle = Color(0xFF748A9D);
     addCardText = Color(0xFF748A9D);

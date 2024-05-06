@@ -118,7 +118,7 @@ Future inActiveState(Product value) async {
               child: Container(
                 color: dark(context) ?Colors.transparent :Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 12,vertical: 12),
-                child: Image.asset("assets/appicon.png",width: 120,height: 120)),
+                child: Image.asset("assets/appicon.jpg",width: 120,height: 120)),
             ),
             SizedBox(height:24),
             CircularProgressIndicator(

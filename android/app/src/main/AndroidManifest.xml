@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
     
    <application
-        android:label="FRESHU"
+        android:label="Mama's Milk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

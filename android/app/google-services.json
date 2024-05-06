@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "951189062000",
-    "project_id": "water-app-b9052",
-    "storage_bucket": "water-app-b9052.appspot.com"
+    "project_number": "1078427920911",
+    "project_id": "mamas-milk",
+    "storage_bucket": "mamas-milk.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:951189062000:android:4f45c978995160634d4fb5",
+        "mobilesdk_app_id": "1:1078427920911:android:0ad0bee82749e766eb917a",
         "android_client_info": {
           "package_name": "subscription.app.com"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "951189062000-0r5cthee7un7h8skdfpepgqlpg84ac06.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "subscription.app.com",
-            "certificate_hash": "8baa97475115eff76352d3cdef779c0018a9504d"
-          }
-        },
-        {
-          "client_id": "951189062000-i681847ge0nnunglttm7g5e5t65r9635.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD090CJTxVtybKs5t8hmMYz5XFFo0z9fow"
+          "current_key": "AIzaSyCsOFhcJthdacVOfTC3S48X_4puMcFEmR4"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "951189062000-bul0ijskgjai0b7mvpccfqdmfr9seq98.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "951189062000-utpvubiucm4utts3be2v1apoiki4hrlt.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "subscription.app.com"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

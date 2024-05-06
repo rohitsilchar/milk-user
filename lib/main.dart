@@ -19,7 +19,6 @@ import 'Utils/local_data/app_state.dart';
 import 'model/settings_model/setting_model.dart';
 import 'repository/setting_repository.dart' as settingRepo;
 
-
 final get = GetStorage();
 GlobalKey<NavigatorState> navkey = GlobalKey<NavigatorState>();
 
@@ -27,24 +26,20 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await GetStorage.init();
-  OneSignal.initialize("c2708dac-1973-44d7-9c86-d383e2a1c29e"); 
- 
+  OneSignal.initialize("c2708dac-1973-44d7-9c86-d383e2a1c29e");
+
   try {
-  
     final id = OneSignal.User.pushSubscription.id;
-    if(id != null){
-     // setOnesignalUserId(id);
+    if (id != null) {
+      // setOnesignalUserId(id);
       await OneSignal.Notifications.requestPermission(true);
     }
-   if (get.hasData("current_user")) {
-    await getCurrentUser();
+    if (get.hasData("current_user")) {
+      await getCurrentUser();
     }
     get.write("id", "1");
-    get.write('url','1');
-
-  } catch (e) {
-    
-  }
+    get.write('url', '1');
+  } catch (e) {}
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -52,13 +47,12 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-
 // setOnesignalUserId(String id){
 //   get.write('player_id',id);
 // }
 
 // String? getOnesignalUserId()  {
-  
+
 //   if (get.hasData('player_id')) {
 //     final str = get.read('player_id');
 //     appState.deviceTokenId = str;
@@ -77,8 +71,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   void initState() {
     super.initState();
@@ -90,66 +82,69 @@ class _MyAppState extends State<MyApp> {
     //         debugPrint('----------- set Player ID ------------ ');
     //          appState.deviceTokenId = osUserID.toString();
     //          setOnesignalUserId(osUserID);
-    //         // updateToken(appState,getOnesignalUserId().toString()); 
+    //         // updateToken(appState,getOnesignalUserId().toString());
     //      }
     //     }
     //  });
-      OneSignal.Notifications.addPermissionObserver((accepted) async{
-      
-       if(accepted == true){
-          OneSignal.consentGiven(true);
-       } else {
-          OneSignal.Notifications.requestPermission(true);
-       }
+    OneSignal.Notifications.addPermissionObserver((accepted) async {
+      if (accepted == true) {
+        OneSignal.consentGiven(true);
+      } else {
+        OneSignal.Notifications.requestPermission(true);
+      }
     });
 
-    OneSignal.Notifications.addClickListener((result) async{
-       result.preventDefault();
+    OneSignal.Notifications.addClickListener((result) async {
+      result.preventDefault();
+
       /// notification.display() to display after preventing default
-       result.notification.display();
-       await notificationOpener(result);
+      result.notification.display();
+      await notificationOpener(result);
     });
   }
 
-   Future<void> notificationOpener(OSNotificationClickEvent result,{String? id}) async {
-     final blog =json.decode(result.notification.rawPayload!['custom'].toString())['a']['order_id'];
-   //  final action = result.notification.rawPayload!['actionId'];
-      // print(result.notification.additionalData!['order_id']);
-     if (get.hasData('url')) {
+  Future<void> notificationOpener(OSNotificationClickEvent result,
+      {String? id}) async {
+    final blog =
+        json.decode(result.notification.rawPayload!['custom'].toString())['a']
+            ['order_id'];
+    //  final action = result.notification.rawPayload!['actionId'];
+    // print(result.notification.additionalData!['order_id']);
+    if (get.hasData('url')) {
+      Future.delayed(Duration(milliseconds: 2000), () {
+        //get.remove('url');
+        get.write('url', '2');
+        Navigator.of(navkey.currentState!.context)
+            .pushNamed(RoutePath.track_order, arguments: blog);
+      });
+    } else {
+      Navigator.of(navkey.currentState!.context)
+          .pushNamed(RoutePath.track_order, arguments: blog);
+    }
+    //  Navigator.push(navkey.currentState!.context,
+    //  MaterialPageRoute(builder: (context) =>Loader(
+    //   product: Product(id:int.parse(blog.toString())),
+    //   action: action)));
 
-       Future.delayed(Duration(milliseconds: 2000),() {
-          //get.remove('url');
-          get.write('url','2');
-          Navigator.of(navkey.currentState!.context).pushNamed(RoutePath.track_order,arguments: blog);
-       });
-
-     } else {
-
-         Navigator.of(navkey.currentState!.context).pushNamed(RoutePath.track_order,arguments: blog);
-     }
-        //  Navigator.push(navkey.currentState!.context, 
-        //  MaterialPageRoute(builder: (context) =>Loader(
-        //   product: Product(id:int.parse(blog.toString())),
-        //   action: action)));
-
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
-          if (get.hasData("language")) {
-            String languageCode = get.read("language");
-            LanguageItem _languageItem = setting.value.languages!
-                .firstWhere((element) => element.languageCode == languageCode);
-            appState.languageItem = _languageItem;
-            appState.currentLanguageCode.value = _languageItem.languageCode!;
-          await settingRepo.getKeysLists(appState.currentLanguageCode.value).then((value) {
-                  appState.languageKeys = value;
-                  setState(() {  });
-            });
-          }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (get.hasData("language")) {
+        String languageCode = get.read("language");
+        LanguageItem _languageItem = setting.value.languages!
+            .firstWhere((element) => element.languageCode == languageCode);
+        appState.languageItem = _languageItem;
+        appState.currentLanguageCode.value = _languageItem.languageCode!;
+        await settingRepo
+            .getKeysLists(appState.currentLanguageCode.value)
+            .then((value) {
+          appState.languageKeys = value;
+          setState(() {});
         });
-   }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return ValueListenableBuilder(
         valueListenable: settingRepo.setting,
         builder: (context, SettingData _setting, _) {
@@ -158,23 +153,25 @@ class _MyAppState extends State<MyApp> {
               builder: (context, String _languageCode, _) {
                 final botToastBuilder = BotToastInit();
                 return ValueListenableBuilder(
-                   valueListenable: darkMode,
-                    builder: (context, theme,child) {
+                    valueListenable: darkMode,
+                    builder: (context, theme, child) {
                       // DynamicTheme.of(context)?.setTheme(AppThemes.Light);
-                      SystemChrome.setSystemUIOverlayStyle(
-                          theme == false
-                              ? SystemUiOverlayStyle.dark
-                                  .copyWith(statusBarColor: Colors.white12)
-                              : SystemUiOverlayStyle.light);
+                      SystemChrome.setSystemUIOverlayStyle(theme == false
+                          ? SystemUiOverlayStyle.dark
+                              .copyWith(statusBarColor: Colors.white12)
+                          : SystemUiOverlayStyle.light);
                       return MaterialApp(
-                        title: 'FRESHU',
+                        title: "Mama'S Milk",
                         navigatorKey: navkey,
-                        theme: theme== true ? themeData(ThemeData.dark(), 1, context)
-                      : themeData(ThemeData.light(), 0, context),
+                        theme: theme == true
+                            ? themeData(ThemeData.dark(), 1, context)
+                            : themeData(ThemeData.light(), 0, context),
                         debugShowCheckedModeBanner: false,
-                        themeMode:  theme == false ? ThemeMode.light : ThemeMode.dark,
+                        themeMode:
+                            theme == false ? ThemeMode.light : ThemeMode.dark,
                         locale: Locale(_languageCode),
-                        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                        localizationsDelegates: <LocalizationsDelegate<
+                            dynamic>>[
                           GlobalMaterialLocalizations.delegate,
                           GlobalWidgetsLocalizations.delegate,
                           GlobalCupertinoLocalizations.delegate,
@@ -187,7 +184,8 @@ class _MyAppState extends State<MyApp> {
                         builder: (context, child) {
                           child = botToastBuilder(context, child);
                           child = Directionality(
-                            textDirection: UtilsHelper.rightHandLang.contains(_languageCode)
+                            textDirection: UtilsHelper.rightHandLang
+                                    .contains(_languageCode)
                                 ? TextDirection.rtl
                                 : TextDirection.ltr,
                             child: child,

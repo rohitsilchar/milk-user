@@ -9,35 +9,30 @@ ProductData? products;
 List<BannerItem>? banners;
 
 class HomeController extends ControllerMVC {
-
   void getHomeBannersApi() async {
     getHomeProductList().then((value) {
+      print("Banner ${value.banners}");
+      print("Products ${value.products}");
       banners = value.banners;
       products = value.products;
       setState(() {});
     }).catchError((e) {
       commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "something_went_wrong"));
-    }).whenComplete(() {
-
-    });
+    }).whenComplete(() {});
   }
 
   Future getPaginatedProducts(String nexrtUrl) async {
-    await getHomeProductList(nexrtUrl:nexrtUrl).then((value) {
-
+    await getHomeProductList(nexrtUrl: nexrtUrl).then((value) {
       products!.currentPage = value.products!.currentPage;
       products!.nextPageUrl = value.products!.nextPageUrl;
       products!.data!.addAll(value.products!.data!.toList());
       setState(() {});
-      
-      print(products!.nextPageUrl);
 
+      print(products!.nextPageUrl);
     }).catchError((e) {
       commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "something_went_wrong"));
-    }).whenComplete(() {
-       
-    });
+    }).whenComplete(() {});
   }
 }

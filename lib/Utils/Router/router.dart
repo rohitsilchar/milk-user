@@ -8,6 +8,7 @@ import 'package:water/View/Offers/offers.dart';
 import 'package:water/View/Order/order_placed.dart';
 import 'package:water/View/Order/track_order.dart';
 import 'package:water/View/Order/your_orders.dart';
+import 'package:water/View/Setting/Reach_us.dart';
 import 'package:water/View/Setting/setting.dart';
 import 'package:water/View/SignIn_SignUp/enter_otp.dart';
 import 'package:water/View/SignIn_SignUp/sign_in.dart';
@@ -139,6 +140,12 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return TermAndCondition();
+          },
+        );
+        case '/reach_us':
+        return MaterialPageRoute(
+          builder: (context) {
+            return ReachUs();
           },
         );
       case '/wallet_screen':

@@ -99,13 +99,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 200,
                 ),
                 SizedBox(height: 90),
-                Text('مياه نقية طبيعية',
-                    style: TextStyle(
-                        fontFamily: 'TheSans',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w400,
-                        color: MyColor.commonColorSet2)),
-                Text('NATURAL PURE WATER',
+                // Text('مياه نقية طبيعية',
+                //     style: TextStyle(
+                //         fontFamily: 'TheSans',
+                //         fontSize: 24,
+                //         fontWeight: FontWeight.w400,
+                //         color: MyColor.commonColorSet2)),
+                Text("Mama's Milk",
                     style: TextStyle(
                         fontFamily: 'TheSans',
                         fontSize: 24,

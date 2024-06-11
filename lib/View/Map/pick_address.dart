@@ -38,8 +38,13 @@ class _PickAddressState extends State<PickAddress> {
     List _addressType = [
       UtilsHelper.getString(context, 'home'),
       UtilsHelper.getString(context, 'office'),
-      UtilsHelper.getString(context, 'mosque'),
+      // UtilsHelper.getString(context, 'mosque'),
       UtilsHelper.getString(context, 'other')
+    ];
+
+    List _deliveryInstructions = [
+      'Ring the bell',
+      'Do not ring the bell',
     ];
 
     return Scaffold(
@@ -151,6 +156,7 @@ class _PickAddressState extends State<PickAddress> {
                 commonButton(
                   onPress: () {
                     Future _future = addAddressBottomSheet(
+                      deliveryNotes: _deliveryInstructions,
                       addressType: _addressType,
                       size: size,
                       lang: lang,
@@ -182,8 +188,12 @@ class _PickAddressState extends State<PickAddress> {
     );
   }
 
-  Future<dynamic> addAddressBottomSheet(
-      {required List addressType, required Size size, required lang}) {
+  Future<dynamic> addAddressBottomSheet({
+    required List addressType,
+    required Size size,
+    required lang,
+    required List deliveryNotes,
+  }) {
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -196,10 +206,10 @@ class _PickAddressState extends State<PickAddress> {
           });
         });
         return SizedBox.fromSize(
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-          child:  SingleChildScrollView(
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+            child: SingleChildScrollView(
               child: Container(
                 color: Colors.white,
                 // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -342,7 +352,7 @@ class _PickAddressState extends State<PickAddress> {
                           Row(
                             children: [
                               Text(
-                                UtilsHelper.getString(context, 'note'),
+                                UtilsHelper.getString(context, 'notexxx'),
                                 style: Theme.of(context)
                                     .textTheme
                                     .displaySmall
@@ -351,8 +361,7 @@ class _PickAddressState extends State<PickAddress> {
                                               .contains(lang)
                                           ? UtilsHelper.wr_default_font_family
                                           : UtilsHelper.the_sans_font_family,
-                                      color:
-                                          MyColor.textSecondarySecondLightColor,
+                                      color: MyColor.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -362,6 +371,7 @@ class _PickAddressState extends State<PickAddress> {
                           SizedBox(
                             height: 7,
                           ),
+                          
                           Container(
                             height: 85,
                             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -421,8 +431,8 @@ class _PickAddressState extends State<PickAddress> {
                 ),
               ),
             ),
-        ),
-                  );
+          ),
+        );
       },
     );
   }

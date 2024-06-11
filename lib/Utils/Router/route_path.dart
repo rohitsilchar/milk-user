@@ -17,6 +17,7 @@ class RoutePath {
   static const String track_order = "/track_order";
   static const String order_placed = "/order_placed";
   static const String term_and_condition = "/term_and_condition";
+  static const String reach_us = "/reach_us";
   static const String wallet_screen = "/wallet_screen";
   static const String add_wallet_amount = "/add_wallet_amount";
   static const String notification = "/notification";

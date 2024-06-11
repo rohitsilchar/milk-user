@@ -15,8 +15,8 @@ class ProductData {
   int? to;
   int? total;
 
-  ProductData({
-      this.currentPage,
+  ProductData(
+      {this.currentPage,
       this.data,
       this.firstPageUrl,
       this.from,
@@ -26,8 +26,7 @@ class ProductData {
       this.path,
       this.perPage,
       this.to,
-      this.total
-  });
+      this.total});
 
   ProductData.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
@@ -88,41 +87,61 @@ class Product {
   DateTime? startDate = DateTime.now().add(Duration(days: 1));
   DateTime? endDate = DateTime.now().add(Duration(days: 1));
 
-  Product(
-      {this.id,
-        this.name,
-        this.image,
-        this.price,
-        this.discountPrice,
-        this.stock,
-        this.description,
-        this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.cartInfo,
-        this.isFavorite,
-        this.orderFrequency = "once",
-        this.days,
-        this.selectedDates,
-        this.quantity=0,
-        this.startDate,
-        this.endDate,
-        this.mininumOrderQuantity,
-      });
+  Product({
+    this.id,
+    this.name,
+    this.image,
+    this.price,
+    this.discountPrice,
+    this.stock,
+    this.description,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.cartInfo,
+    this.isFavorite,
+    this.orderFrequency = "once",
+    this.days,
+    this.selectedDates,
+    this.quantity = 0,
+    this.startDate,
+    this.endDate,
+    this.mininumOrderQuantity,
+  });
 
   Product.fromJson(Map<String, dynamic> json) {
+    // id = json['id'];
+    // name = json['name'];
+    // image = json['image'];
+    // price = json['price'].toDouble();
+    // discountPrice = json['discount_price'] != null ? json['discount_price'].toDouble() : null;
+    // stock = json['stock'];
+    // description = json['description'];
+    // status = json['status'];
+    // createdAt = DateTime.parse(json["created_at"]);
+    // updatedAt = DateTime.parse(json["updated_at"]);
+    // cartInfo = json['cart_info'];
+    // mininumOrderQuantity  = json['minimum_order_quantity'];
+    // isFavorite = json['is_favorite'];
+    // selectedDates = [DateTime.now().add(Duration(days: 1))];
+    // startDate = DateTime.now().add(Duration(days: 1));
+    // endDate = DateTime.now().add(Duration(days: 1));
     id = json['id'];
     name = json['name'];
     image = json['image'];
-    price = json['price'].toDouble();
-    discountPrice = json['discount_price'] != null ? json['discount_price'].toDouble() : null;
+    price = json['price']?.toDouble();
+    discountPrice = json['discount_price'] != null
+        ? json['discount_price'].toDouble()
+        : null;
     stock = json['stock'];
     description = json['description'];
     status = json['status'];
-    createdAt = DateTime.parse(json["created_at"]);
-    updatedAt = DateTime.parse(json["updated_at"]);
+    createdAt =
+        json['created_at'] != null ? DateTime.parse(json['created_at']) : null;
+    updatedAt =
+        json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null;
     cartInfo = json['cart_info'];
-    mininumOrderQuantity  = json['minimum_order_quantity'];
+    mininumOrderQuantity = json['minimum_order_quantity'];
     isFavorite = json['is_favorite'];
     selectedDates = [DateTime.now().add(Duration(days: 1))];
     startDate = DateTime.now().add(Duration(days: 1));
@@ -130,32 +149,58 @@ class Product {
   }
 
   Product.fromCartJson(Map<String, dynamic> json) {
+    // id = json['id'];
+    // name = json['name'];
+    // image = json['image'];
+    // mininumOrderQuantity= json['minimum_order_quantity'];
+    // price = json['price'].toDouble();
+    // discountPrice = json['discount_price'] != null ? json['discount_price'].toDouble() : null;
+    // stock = json['stock'];
+    // description = json['description'];
+    // status = json['status'];
+    // createdAt = DateTime.parse(json["created_at"]);
+    // updatedAt = DateTime.parse(json["updated_at"]);
+    // cartInfo = json['cart_info'];
+    // isFavorite = json['is_favorite'];
+    // quantity = json['quantity'];
+    // orderFrequency = json['orderFrequency'];
+    // days = json['days'];
+    // selectedDates = List<DateTime>.from(json["selectedDates"].map((x) => DateTime.parse(x)));
     id = json['id'];
     name = json['name'];
     image = json['image'];
-    mininumOrderQuantity= json['minimum_order_quantity'];
-    price = json['price'].toDouble();
-    discountPrice = json['discount_price'] != null ? json['discount_price'].toDouble() : null;
+    mininumOrderQuantity = json['minimum_order_quantity'];
+    price = json['price']?.toDouble();
+    discountPrice = json['discount_price'] != null
+        ? json['discount_price'].toDouble()
+        : null;
     stock = json['stock'];
     description = json['description'];
     status = json['status'];
-    createdAt = DateTime.parse(json["created_at"]);
-    updatedAt = DateTime.parse(json["updated_at"]);
+    createdAt =
+        json['created_at'] != null ? DateTime.parse(json['created_at']) : null;
+    updatedAt =
+        json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null;
     cartInfo = json['cart_info'];
     isFavorite = json['is_favorite'];
     quantity = json['quantity'];
     orderFrequency = json['orderFrequency'];
     days = json['days'];
-    selectedDates = List<DateTime>.from(json["selectedDates"].map((x) => DateTime.parse(x)));
+    selectedDates = json['selectedDates'] != null
+        ? List<DateTime>.from(
+            json['selectedDates'].map((x) => DateTime.parse(x)))
+        : [DateTime.now().add(Duration(days: 1))];
   }
 
   Product.fromLocalJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     image = json['image'];
-     mininumOrderQuantity= json['minimum_order_quantity'];
+    mininumOrderQuantity = json['minimum_order_quantity'];
     price = json['price'].toDouble();
-    discountPrice = json['discount_price'] != null ? json['discount_price'].toDouble() : null;
+    discountPrice = json['discount_price'] != null
+        ? json['discount_price'].toDouble()
+        : null;
     stock = json['stock'];
     description = json['description'];
     status = json['status'];
@@ -173,23 +218,18 @@ class Product {
         days!.add(v);
       });
     }
-    if(json['selectedDates'] != null) {
-      selectedDates=[];
+    if (json['selectedDates'] != null) {
+      selectedDates = [];
       jsonDecode(json['selectedDates']).forEach((x) {
         selectedDates!.add(DateTime.parse(x));
       });
     }
   }
 
-
-
-@override
+  @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Product &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
-
+      other is Product && runtimeType == other.runtimeType && id == other.id;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -208,10 +248,14 @@ class Product {
     data['quantity'] = this.quantity;
     data['minimum_order_quantity'] = mininumOrderQuantity;
     data['orderFrequency'] = this.orderFrequency;
-    data['days'] = this.days!=null ? json.encode(this.days) : null;
-    data['selectedDates'] = this.selectedDates!=null ? json.encode(List<dynamic>.from(this.selectedDates!.map((x) => x.toIso8601String()))) : null;
-    data["start_date"] = this.startDate!=null ? startDate!.toIso8601String() : null;
-    data["end_date"] = this.endDate!=null ? endDate!.toIso8601String() : null;
+    data['days'] = this.days != null ? json.encode(this.days) : null;
+    data['selectedDates'] = this.selectedDates != null
+        ? json.encode(List<dynamic>.from(
+            this.selectedDates!.map((x) => x.toIso8601String())))
+        : null;
+    data["start_date"] =
+        this.startDate != null ? startDate!.toIso8601String() : null;
+    data["end_date"] = this.endDate != null ? endDate!.toIso8601String() : null;
     return data;
   }
 
@@ -221,31 +265,35 @@ class Product {
     data['quantity'] = this.quantity;
     data['minimum_order_quantity'] = mininumOrderQuantity;
     data['order_frequency'] = this.orderFrequency;
-    data['days'] = this.days!=null ? this.days : [];
-    data['delivery_dates'] = this.selectedDates!=null ? List<dynamic>.from(this.selectedDates!.map((x) => x.toIso8601String())) : null;
-    data["start_date"] = this.startDate!=null ? startDate!.toIso8601String() : null;
-    data["end_date"] = this.endDate!=null ? endDate!.toIso8601String() : null;
+    data['days'] = this.days != null ? this.days : [];
+    data['delivery_dates'] = this.selectedDates != null
+        ? List<dynamic>.from(
+            this.selectedDates!.map((x) => x.toIso8601String()))
+        : null;
+    data["start_date"] =
+        this.startDate != null ? startDate!.toIso8601String() : null;
+    data["end_date"] = this.endDate != null ? endDate!.toIso8601String() : null;
     return data;
   }
 
   getFrequencyCount() {
-    switch(orderFrequency) {
+    switch (orderFrequency) {
       case 'once':
         return 1;
       case 'daily':
-        if(endDate!=null && startDate!=null) {
-          return daysBetweenDates(startDate!, endDate!)+1;
+        if (endDate != null && startDate != null) {
+          return daysBetweenDates(startDate!, endDate!) + 1;
         } else {
           return 0;
         }
       case 'weekly':
-        if(endDate!=null && startDate!=null) {
-          int _days = endDate!.difference(startDate!).inDays+1;
+        if (endDate != null && startDate != null) {
+          int _days = endDate!.difference(startDate!).inDays + 1;
           List<DateTime> _list = [];
           DateTime _dateTime;
-          for(int i=0; i<_days; i++) {
+          for (int i = 0; i < _days; i++) {
             _dateTime = startDate!.add(Duration(days: i));
-            if(days!=null && days!.contains(_dateTime.weekday%7)) {
+            if (days != null && days!.contains(_dateTime.weekday % 7)) {
               _list.add(_dateTime);
             }
           }
@@ -254,34 +302,34 @@ class Product {
           return 0;
         }
       case 'monthly':
-        return selectedDates?.length??0;
+        return selectedDates?.length ?? 0;
       case 'alternative':
-        if(endDate!=null && startDate!=null) {
-          int days = endDate!.difference(startDate!).inDays+1;
+        if (endDate != null && startDate != null) {
+          int days = endDate!.difference(startDate!).inDays + 1;
           List<DateTime> _list = [];
-          for (int i = 0; i < days; i+=2) {
+          for (int i = 0; i < days; i += 2) {
             DateTime _cDate = startDate!.add(Duration(days: i));
-              _list.add(_cDate);
+            _list.add(_cDate);
           }
           print(_list.length);
           return _list.length;
         } else {
           return 0;
         }
-      default :
+      default:
         return 1;
     }
   }
 
   List<DateTime> getSelectedDates() {
-    switch(orderFrequency) {
+    switch (orderFrequency) {
       case 'once':
-        return selectedDates??[];
+        return selectedDates ?? [];
       case 'daily':
-        if(endDate!=null && startDate!=null) {
-          int _days = daysBetweenDates(startDate!, endDate!)+1;
+        if (endDate != null && startDate != null) {
+          int _days = daysBetweenDates(startDate!, endDate!) + 1;
           selectedDates = [];
-          for(int i=0; i<_days; i++) {
+          for (int i = 0; i < _days; i++) {
             selectedDates!.add(startDate!.add(Duration(days: i)));
           }
           return selectedDates!;
@@ -289,13 +337,13 @@ class Product {
           return [];
         }
       case 'weekly':
-        if(endDate!=null && startDate!=null) {
-          int _days = endDate!.difference(startDate!).inDays+1;
+        if (endDate != null && startDate != null) {
+          int _days = endDate!.difference(startDate!).inDays + 1;
           selectedDates = [];
           DateTime _dateTime;
-          for(int i=0; i<_days; i++) {
+          for (int i = 0; i < _days; i++) {
             _dateTime = startDate!.add(Duration(days: i));
-            if(days!=null && days!.contains(_dateTime.weekday%7)) {
+            if (days != null && days!.contains(_dateTime.weekday % 7)) {
               selectedDates!.add(_dateTime);
             }
           }
@@ -304,12 +352,12 @@ class Product {
           return [];
         }
       case 'monthly':
-        return selectedDates??[];
+        return selectedDates ?? [];
       case 'alternative':
-        if(endDate!=null && startDate!=null) {
-          int days = endDate!.difference(startDate!).inDays+1;
+        if (endDate != null && startDate != null) {
+          int days = endDate!.difference(startDate!).inDays + 1;
           selectedDates = [];
-          for (int i = 0; i < days; i+=2) {
+          for (int i = 0; i < days; i += 2) {
             DateTime _cDate = startDate!.add(Duration(days: i));
             selectedDates!.add(_cDate);
           }
@@ -318,12 +366,11 @@ class Product {
         } else {
           return [];
         }
-      default :
+      default:
         return [];
     }
   }
-  
+
   @override
   int get hashCode => super.hashCode;
-  
 }

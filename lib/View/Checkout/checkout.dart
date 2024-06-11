@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -39,8 +40,13 @@ class _CheckoutState extends StateMVC<Checkout> {
   bool pickLocationEnable = true;
   int selectedLocationId = -1;
   int _selectedAddress = 0;
-  List<String> addressTypeList = ['home', 'office', 'mosque', 'other'];
+  List<String> addressTypeList = ['home', 'office', 'other'];
   List? _addressType;
+
+  List _deliveryInstructions = [
+    'Ring the bell',
+    'Do not ring the bell',
+  ];
 
   late Razorpay _razorpay;
 
@@ -98,6 +104,59 @@ class _CheckoutState extends StateMVC<Checkout> {
             null, "EXTERNAL_WALLET: " + response.walletName.toString()));
   }
 
+  static Future<bool> requestLocationPermission(BuildContext context) async {
+    // Request location permission
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled, prompt the user to enable it
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Location Service'),
+          content:
+              Text('Please enable location services to access this feature.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+
+    // Check if permission is granted
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      // Permission is denied, request permission
+      permission = await Geolocator.requestPermission();
+    }
+
+    // Return whether permission is granted or not
+    return permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always;
+  }
+
+  void _showSnackbar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text('Please allow the location permission to Add Address'),
+      duration: Duration(seconds: 2), // Duration for which snackbar is visible
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          // Perform an action when the user presses the action button
+          // For example, you can undo the operation that triggered the snackbar
+        },
+      ),
+    );
+
+    // Show the snackbar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -107,7 +166,6 @@ class _CheckoutState extends StateMVC<Checkout> {
       UtilsHelper.getString(context, addressTypeList[0]),
       UtilsHelper.getString(context, addressTypeList[1]),
       UtilsHelper.getString(context, addressTypeList[2]),
-      UtilsHelper.getString(context, addressTypeList[3])
     ];
 
     return Scaffold(
@@ -137,45 +195,51 @@ class _CheckoutState extends StateMVC<Checkout> {
                             height: 31,
                           ),
                           GestureDetector(
-                            onTap: () {
-                              print("add address pressed");
-                                    _addressTitle.clear();
-                                    _noteController.clear();
-                                    _selectedAddress = 0;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => PlacePicker(
-                                          selectInitialPosition: true,
-                                          pinBuilder: (context, state) {
-                                            return Icon(Icons.location_pin,
-                                                color: MyColor.commonColorSet2,
-                                                size: 40
-                                              );
-                                          },
-                                          apiKey:ProjectKeys.googlePlacePickerKey,
-                                          selectedPlaceWidgetBuilder: (context,
-                                              PickResult? result,
-                                              state,
-                                              isSearchBarFocused) {
-                                            return selectPlaceWidgetBuild(
-                                                context,
-                                                result,
-                                                state,
-                                                isSearchBarFocused,
-                                                _addressType!,
-                                                lang,
-                                                size,
-                                                null);
-                                          }, // Put YOUR OWN KEY here.
-                                          onPlacePicked: (result) {},
-                                          initialPosition: LatLng(
-                                              37.42796133580664,
-                                              -122.085749655962),
-                                          useCurrentLocation: true,
-                                        ),
-                                      ),
-                                    );
+                            onTap: () async {
+                              bool permissionGranted =
+                                  await requestLocationPermission(context);
+                              if (permissionGranted) {
+                                print("Permisssion Granted");
+                                print("add address pressed");
+                                _addressTitle.clear();
+                                _noteController.clear();
+                                _selectedAddress = 0;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlacePicker(
+                                      selectInitialPosition: true,
+                                      pinBuilder: (context, state) {
+                                        return Icon(Icons.location_pin,
+                                            color: MyColor.commonColorSet2,
+                                            size: 40);
+                                      },
+                                      apiKey: ProjectKeys.googlePlacePickerKey,
+                                      selectedPlaceWidgetBuilder: (context,
+                                          PickResult? result,
+                                          state,
+                                          isSearchBarFocused) {
+                                        return selectPlaceWidgetBuild(
+                                            context,
+                                            result,
+                                            state,
+                                            isSearchBarFocused,
+                                            _addressType!,
+                                            lang,
+                                            size,
+                                            null);
+                                      }, // Put YOUR OWN KEY here.
+                                      onPlacePicked: (result) {},
+                                      initialPosition: LatLng(
+                                          37.42796133580664, -122.085749655962),
+                                      useCurrentLocation: true,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                print("Permisssion Not Granted");
+                                _showSnackbar(context);
+                              }
                             },
                             child: Container(
                               height: 50,
@@ -186,7 +250,7 @@ class _CheckoutState extends StateMVC<Checkout> {
                                     ? MyColor.commonColorSet1
                                     : MyColor.coreBackgroundColor,
                                 borderRadius: BorderRadius.all(
-                                   Radius.circular(8),
+                                  Radius.circular(8),
                                 ),
                               ),
                               child: ClipRRect(
@@ -203,7 +267,10 @@ class _CheckoutState extends StateMVC<Checkout> {
                                         child: RotatedBox(
                                           quarterTurns: 2,
                                           child: SvgPicture.asset(
-                                              "assets/location.svg",width: 24,height: 24,),
+                                            "assets/location.svg",
+                                            width: 24,
+                                            height: 24,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -215,42 +282,45 @@ class _CheckoutState extends StateMVC<Checkout> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                          Text(
-                                            UtilsHelper.getString(
-                                                context, 'add_address'),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall
-                                                ?.copyWith(
-                                                  fontFamily: !UtilsHelper
-                                                          .rightHandLang
-                                                          .contains(lang)
-                                                      ? UtilsHelper
-                                                          .wr_default_font_family
-                                                      : UtilsHelper
-                                                          .the_sans_font_family,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                  color:  dark(context) ? Colors.white  :MyColor.textPrimaryColor,
+                                            Text(
+                                              UtilsHelper.getString(
+                                                  context, 'add_address'),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displaySmall
+                                                  ?.copyWith(
+                                                    fontFamily: !UtilsHelper
+                                                            .rightHandLang
+                                                            .contains(lang)
+                                                        ? UtilsHelper
+                                                            .wr_default_font_family
+                                                        : UtilsHelper
+                                                            .the_sans_font_family,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: dark(context)
+                                                        ? Colors.white
+                                                        : MyColor
+                                                            .textPrimaryColor,
+                                                  ),
+                                            ),
+                                            Container(
+                                              height: 31,
+                                              width: 31,
+                                              decoration: BoxDecoration(
+                                                color: MyColor.commonColorSet2,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(22),
                                                 ),
-                                          ),
-                                           Container(
-                                          height: 31,
-                                          width: 31,
-                                          decoration: BoxDecoration(
-                                            color:   MyColor.commonColorSet2,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(22),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: Colors.white,
+                                                  size: 16,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              color:Colors.white,
-                                              size: 16,
-                                            ),
-                                          ),
-                                        ),
                                             // if (pickLocationEnable == true)
                                             //   Container(
                                             //     height: 5,
@@ -283,8 +353,6 @@ class _CheckoutState extends StateMVC<Checkout> {
                               ),
                             ),
                           ),
-                         
-                          
                           SizedBox(
                             height: 15,
                           ),
@@ -331,7 +399,8 @@ class _CheckoutState extends StateMVC<Checkout> {
                     child: commonButton(
                       onPress: () {
                         if (selectedLocationId >= 0) {
-                          appState.selectedPickupAddress = appState.pickupAddressList.value[selectedLocationId];
+                          appState.selectedPickupAddress = appState
+                              .pickupAddressList.value[selectedLocationId];
                           Navigator.of(context)
                               .pushNamed(RoutePath.checkout_pay);
                           // openCheckout();
@@ -342,16 +411,21 @@ class _CheckoutState extends StateMVC<Checkout> {
                         }
                       },
                       prefixPath: 'assets/icon_arrow.svg',
-                      title: UtilsHelper.getString(
-                          context,'next'),
-                      textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontFamily:!UtilsHelper.rightHandLang.contains(lang)
-                                        ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                color: dark(context) ? Colors.white 
-                                : MyColor.textPrimaryLightColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14),
-                      color : MyColor.commonColorSet2,
+                      title: UtilsHelper.getString(context, 'next'),
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                              fontFamily:
+                                  !UtilsHelper.rightHandLang.contains(lang)
+                                      ? UtilsHelper.wr_default_font_family
+                                      : UtilsHelper.the_sans_font_family,
+                              color: dark(context)
+                                  ? Colors.white
+                                  : MyColor.textPrimaryLightColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                      color: MyColor.commonColorSet2,
                     ),
                   ),
                   SizedBox(
@@ -389,7 +463,7 @@ class _CheckoutState extends StateMVC<Checkout> {
             height: 60,
             width: size.width,
             decoration: BoxDecoration(
-              color:MyColor.coreBackgroundColor,
+              color: MyColor.coreBackgroundColor,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,7 +473,8 @@ class _CheckoutState extends StateMVC<Checkout> {
                   child: Center(
                     child: CircleAvatar(
                       radius: 12,
-                      backgroundColor:  Theme.of(context).brightness == Brightness.light
+                      backgroundColor:
+                          Theme.of(context).brightness == Brightness.light
                               ? (selected != index
                                   ? MyColor.coreBackgroundColor
                                   : MyColor.commonColorSet2!.withOpacity(0.2))
@@ -410,7 +485,9 @@ class _CheckoutState extends StateMVC<Checkout> {
                         height: 12,
                         width: 12,
                         decoration: BoxDecoration(
-                        color:selected != index ? Colors.black.withOpacity(0.1) : MyColor.commonColorSet2,
+                          color: selected != index
+                              ? Colors.black.withOpacity(0.1)
+                              : MyColor.commonColorSet2,
                           borderRadius: BorderRadius.all(
                             Radius.circular(12),
                           ),
@@ -499,7 +576,7 @@ class _CheckoutState extends StateMVC<Checkout> {
                   },
                   child: Container(
                     width: 45,
-                     color: hexToRgb('#748A9D'),
+                    color: hexToRgb('#748A9D'),
                     child: Center(
                       child: Container(
                         height: 23,
@@ -507,7 +584,8 @@ class _CheckoutState extends StateMVC<Checkout> {
                           "assets/edit_icon.svg",
                           height: 23,
                           fit: BoxFit.fitHeight,
-                         colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                          colorFilter:
+                              ColorFilter.mode(Colors.white, BlendMode.srcIn),
                         ),
                       ),
                     ),
@@ -528,7 +606,7 @@ class _CheckoutState extends StateMVC<Checkout> {
                     },
                     child: Container(
                       width: 45,
-                      color: hexToRgb('#748A9D') ,
+                      color: hexToRgb('#748A9D'),
                       child: Center(
                         child: Container(
                           height: 23,
@@ -536,7 +614,7 @@ class _CheckoutState extends StateMVC<Checkout> {
                             "assets/edit_delete.svg",
                             height: 23,
                             fit: BoxFit.fitHeight,
-                            color:  Colors.white ,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -548,19 +626,22 @@ class _CheckoutState extends StateMVC<Checkout> {
         ));
   }
 
-  Future<dynamic> addAddressBottomSheet(
-      {required List addressType,
-      required Size size,
-      required lang,
-      PickResult? pickResult,
-      AddressItem? addressItem}) {
+  Future<dynamic> addAddressBottomSheet({
+    required List addressType,
+    required Size size,
+    required lang,
+    PickResult? pickResult,
+    AddressItem? addressItem,
+    required List deliveryNotes,
+  }) {
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SizedBox.fromSize(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
@@ -568,9 +649,11 @@ class _CheckoutState extends StateMVC<Checkout> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                   color: dark(context) ? MyColor.commonColorSet1 : hexToRgb('#F0F4F8'),
+                    color: dark(context)
+                        ? MyColor.commonColorSet1
+                        : hexToRgb('#F0F4F8'),
                   ),
-                 margin: EdgeInsets.symmetric(horizontal: 26,vertical: 30),
+                  margin: EdgeInsets.symmetric(horizontal: 26, vertical: 30),
                   child: Column(
                     children: [
                       Container(
@@ -591,7 +674,9 @@ class _CheckoutState extends StateMVC<Checkout> {
                                                 .contains(lang)
                                             ? UtilsHelper.wr_default_font_family
                                             : UtilsHelper.the_sans_font_family,
-                                        color: dark(context) ? Colors.white :MyColor.commonColorSet1,
+                                        color: dark(context)
+                                            ? Colors.white
+                                            : MyColor.commonColorSet1,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -626,8 +711,11 @@ class _CheckoutState extends StateMVC<Checkout> {
                                                   Radius.circular(8),
                                                 ),
                                                 color: _selectedAddress == index
-                                                    ?  MyColor.baseDarkColor
-                                                    : dark(context) ? MyColor.baseDarkColor!.withOpacity(0.3): MyColor.mainColor,
+                                                    ? MyColor.baseDarkColor
+                                                    : dark(context)
+                                                        ? MyColor.baseDarkColor!
+                                                            .withOpacity(0.3)
+                                                        : MyColor.mainColor,
                                               ),
                                               child: Center(
                                                 child: Text(
@@ -647,7 +735,12 @@ class _CheckoutState extends StateMVC<Checkout> {
                                                         color: _selectedAddress ==
                                                                 index
                                                             ? MyColor.white
-                                                            :  dark(context) ? Colors.white.withOpacity(0.3): MyColor.commonColorSet1,
+                                                            : dark(context)
+                                                                ? Colors.white
+                                                                    .withOpacity(
+                                                                        0.3)
+                                                                : MyColor
+                                                                    .commonColorSet1,
                                                       ),
                                                 ),
                                               ),
@@ -666,7 +759,8 @@ class _CheckoutState extends StateMVC<Checkout> {
                             Row(
                               children: [
                                 Text(
-                                  UtilsHelper.getString(context, 'address_title'),
+                                  UtilsHelper.getString(
+                                      context, 'address_title'),
                                   style: Theme.of(context)
                                       .textTheme
                                       .displaySmall
@@ -675,8 +769,9 @@ class _CheckoutState extends StateMVC<Checkout> {
                                                 .contains(lang)
                                             ? UtilsHelper.wr_default_font_family
                                             : UtilsHelper.the_sans_font_family,
-                                        color:
-                                          dark(context) ? Colors.white :  MyColor.commonColorSet1,
+                                        color: dark(context)
+                                            ? Colors.white
+                                            : MyColor.commonColorSet1,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -690,7 +785,9 @@ class _CheckoutState extends StateMVC<Checkout> {
                               height: 50,
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
-                                color:dark(context) ? Color.fromRGBO(63, 76, 84, 1) : MyColor.mainColor,
+                                color: dark(context)
+                                    ? Color.fromRGBO(63, 76, 84, 1)
+                                    : MyColor.mainColor,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
                                 ),
@@ -717,8 +814,9 @@ class _CheckoutState extends StateMVC<Checkout> {
                                                 .contains(lang)
                                             ? UtilsHelper.wr_default_font_family
                                             : UtilsHelper.the_sans_font_family,
-                                        color:
-                                           dark(context) ?Colors.white :  MyColor.commonColorSet1,
+                                        color: dark(context)
+                                            ? Colors.white
+                                            : MyColor.commonColorSet1,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -732,7 +830,9 @@ class _CheckoutState extends StateMVC<Checkout> {
                               height: 85,
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
-                                color: dark(context) ? Color.fromRGBO(63, 76, 84, 1) :MyColor.mainColor,
+                                color: dark(context)
+                                    ? Color.fromRGBO(63, 76, 84, 1)
+                                    : MyColor.mainColor,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
                                 ),
@@ -745,6 +845,96 @@ class _CheckoutState extends StateMVC<Checkout> {
                                   border: InputBorder.none,
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  UtilsHelper.getString(
+                                      context, 'Delivery Instructions'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(
+                                        fontFamily: !UtilsHelper.rightHandLang
+                                                .contains(lang)
+                                            ? UtilsHelper.wr_default_font_family
+                                            : UtilsHelper.the_sans_font_family,
+                                        color: MyColor
+                                            .textSecondarySecondLightColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 13,
+                            ),
+                            StatefulBuilder(
+                              builder: (context, setState) {
+                                return Container(
+                                  height: 38,
+                                  width: size.width,
+                                  child: Row(
+                                    // shrinkWrap: true,
+                                    // scrollDirection: Axis.horizontal,
+                                    children: List.generate(
+                                      deliveryNotes.length,
+                                      (index) => Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _selectedAddress = index;
+                                            });
+                                          },
+                                          child: Container(
+                                            // width: 87,
+                                            margin: EdgeInsets.only(
+                                                right: index == 0 ? 0 : 9),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              color: _selectedAddress == index
+                                                  ? MyColor.commonColorSet2
+                                                  : MyColor.mainColor,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                deliveryNotes[index],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                      fontFamily: !UtilsHelper
+                                                              .rightHandLang
+                                                              .contains(lang)
+                                                          ? UtilsHelper
+                                                              .wr_default_font_family
+                                                          : UtilsHelper
+                                                              .the_sans_font_family,
+                                                      fontSize: 10,
+                                                      color: _selectedAddress ==
+                                                              index
+                                                          ? MyColor.white
+                                                          : MyColor
+                                                              .textSecondarySecondLightColor,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 7,
                             ),
                             SizedBox(
                               height: 25,
@@ -764,20 +954,23 @@ class _CheckoutState extends StateMVC<Checkout> {
                                       id: addressItem == null
                                           ? 0
                                           : addressItem.id,
-          
+
                                       /// for add it's 0 & for update it's 1.
                                       type: addressTypeList[_selectedAddress],
                                       address: _addressTitle.text.trim(),
-                                      googleAddress: pickResult.formattedAddress,
+                                      googleAddress:
+                                          pickResult.formattedAddress,
                                       // googleAddress: placemark.street,
                                       note: _noteController.text.trim(),
                                       city: placemark.subAdministrativeArea,
                                       state: placemark.locality,
                                       country: placemark.country,
                                       zipcode: placemark.postalCode,
-                                      latitude: pickResult.geometry!.location.lat
+                                      latitude: pickResult
+                                          .geometry!.location.lat
                                           .toString(),
-                                      longitude: pickResult.geometry!.location.lng
+                                      longitude: pickResult
+                                          .geometry!.location.lng
                                           .toString(),
                                       isDefault: 0, // TODO: for default value
                                     );
@@ -871,6 +1064,7 @@ class _CheckoutState extends StateMVC<Checkout> {
                             addressTypeList.indexOf(addressItem.type!);
                       }
                       Future _future = addAddressBottomSheet(
+                          deliveryNotes: _deliveryInstructions,
                           addressType: _addType,
                           size: size,
                           lang: lang,

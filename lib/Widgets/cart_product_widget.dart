@@ -37,8 +37,8 @@ class _CartProductWidgetState extends State<CartProductWidget> {
   List<String> orderFrequency = [
     'once',
     'daily',
-    'weekly',
-    'monthly',
+    // 'weekly',
+    'flexible',
     'alternative'
   ];
   List<String> months = [
@@ -182,12 +182,12 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                     },
                     child: Container(
                       height: 80,
-                     width: size.width - 60,
-                      padding:EdgeInsets.symmetric(vertical: 8),
+                      width: size.width - 60,
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         color: Theme.of(context).brightness == Brightness.light
                             ? Color(0xffF0F4F8)
-                            :  Color.fromRGBO(30, 43, 51, 1) ,
+                            : Color.fromRGBO(30, 43, 51, 1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -198,17 +198,18 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                   SizedBox(width: 8),
+                                  SizedBox(width: 8),
                                   Container(
                                     width: 60,
-                                   decoration: BoxDecoration(
-                                     borderRadius: BorderRadius.circular(8),
-                                     image: DecorationImage(
-                                        fit: BoxFit.contain,
-                                      image: CachedNetworkImageProvider(
-                                          Urls.getImageUrlFromName(widget.product!.image ?? ""),
-                                        ),)
-                                   ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: DecorationImage(
+                                          fit: BoxFit.contain,
+                                          image: CachedNetworkImageProvider(
+                                            Urls.getImageUrlFromName(
+                                                widget.product!.image ?? ""),
+                                          ),
+                                        )),
                                   ),
                                   SizedBox(width: 8),
                                   Expanded(
@@ -220,7 +221,8 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                       children: [
                                         SizedBox(height: 3),
                                         Row(
-                                          crossAxisAlignment:CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Text(
@@ -231,8 +233,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                     ?.copyWith(
                                                       fontFamily: !UtilsHelper
                                                               .rightHandLang
-                                                              .contains(
-                                                                  lang)
+                                                              .contains(lang)
                                                           ? UtilsHelper
                                                               .wr_default_font_family
                                                           : UtilsHelper
@@ -242,17 +243,20 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                           FontWeight.w600,
                                                       color: Theme.of(context)
                                                                   .brightness ==
-                                                              Brightness
-                                                                  .light
-                                                          ? MyColor.commonColorSet1
+                                                              Brightness.light
+                                                          ? MyColor
+                                                              .commonColorSet1
                                                           : MyColor.white,
                                                     ),
                                               ),
                                             ),
-                                             Container(
-                                             // height: 5,
+                                            Container(
+                                              // height: 5,
                                               child: RotatedBox(
-                                                quarterTurns: widget.isSelected == true ? 1: 3,
+                                                quarterTurns:
+                                                    widget.isSelected == true
+                                                        ? 1
+                                                        : 3,
                                                 child: SvgPicture.asset(
                                                   "assets/icon-chevron.svg",
                                                   fit: BoxFit.fitHeight,
@@ -264,7 +268,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                             SizedBox(width: 12)
                                           ],
                                         ),
-                                         Spacer(),
+                                        Spacer(),
                                         Row(
                                           children: [
                                             Text(
@@ -293,27 +297,40 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                     color: Theme.of(context)
                                                                 .brightness ==
                                                             Brightness.light
-                                                        ? MyColor.commonColorSet1
+                                                        ? MyColor
+                                                            .commonColorSet1
                                                         : MyColor.white,
-                                                    fontWeight:
-                                                        FontWeight.w500,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
                                             ),
                                             Spacer(flex: 3),
-                                              GestureDetector(
+                                            GestureDetector(
                                               onTap: () {
-                                                 if (widget.product!.quantity == widget.product!.mininumOrderQuantity) {
-                                                    appState.removeProductFromCart(widget.product!, selectedQuatity : widget.product!.mininumOrderQuantity);
-                                                  } else if (widget.product!.quantity > widget.product!.mininumOrderQuantity!.toInt()) {
-                                                  appState.decreaseProduct(widget.product!);
+                                                if (widget.product!.quantity ==
+                                                    widget.product!
+                                                        .mininumOrderQuantity) {
+                                                  appState.removeProductFromCart(
+                                                      widget.product!,
+                                                      selectedQuatity: widget
+                                                          .product!
+                                                          .mininumOrderQuantity);
+                                                } else if (widget
+                                                        .product!.quantity >
+                                                    widget.product!
+                                                        .mininumOrderQuantity!
+                                                        .toInt()) {
+                                                  appState.decreaseProduct(
+                                                      widget.product!);
                                                 }
                                               },
                                               child: Container(
                                                 height: 27,
                                                 width: 27,
                                                 decoration: BoxDecoration(
-                                                  color: MyColor.mainColorWithBlack,
-                                                  borderRadius: BorderRadius.all(
+                                                  color: MyColor
+                                                      .mainColorWithBlack,
+                                                  borderRadius:
+                                                      BorderRadius.all(
                                                     Radius.circular(20),
                                                   ),
                                                 ),
@@ -327,28 +344,37 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                             ),
                                             Spacer(),
                                             Text(
-                                              widget.product!.quantity.toString(),
+                                              widget.product!.quantity
+                                                  .toString(),
                                               style: TextStyle(
-                                                fontFamily:
-                                                    !UtilsHelper.rightHandLang.contains(lang)
-                                                        ? UtilsHelper.wr_default_font_family
-                                                        : UtilsHelper.the_sans_font_family,
+                                                fontFamily: !UtilsHelper
+                                                        .rightHandLang
+                                                        .contains(lang)
+                                                    ? UtilsHelper
+                                                        .wr_default_font_family
+                                                    : UtilsHelper
+                                                        .the_sans_font_family,
                                                 fontSize: 16,
-                                                color: dark(context) ? Colors.white : MyColor.commonColorSet1,
+                                                color: dark(context)
+                                                    ? Colors.white
+                                                    : MyColor.commonColorSet1,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                           Spacer(),
+                                            Spacer(),
                                             GestureDetector(
                                               onTap: () {
-                                                appState.increaseProduct(widget.product!);
+                                                appState.increaseProduct(
+                                                    widget.product!);
                                               },
                                               child: Container(
                                                 height: 27,
                                                 width: 27,
                                                 decoration: BoxDecoration(
-                                                  color: MyColor.mainColorWithBlack,
-                                                  borderRadius: BorderRadius.all(
+                                                  color: MyColor
+                                                      .mainColorWithBlack,
+                                                  borderRadius:
+                                                      BorderRadius.all(
                                                     Radius.circular(20),
                                                   ),
                                                 ),
@@ -361,7 +387,6 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                               ),
                                             ),
                                             SizedBox(width: 12),
-                                           
                                           ],
                                         ),
                                       ],
@@ -395,7 +420,6 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                           //
                           //   ],
                           // ),
-                        
                         ],
                       ),
                     ),
@@ -425,7 +449,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).brightness == Brightness.light
                           ? Color(0xffF0F4F8)
-                          :  Color.fromRGBO(30, 43, 51, 1) ,
+                          : Color.fromRGBO(30, 43, 51, 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -454,9 +478,10 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                     width: size.width * 0.23,
                                     decoration: BoxDecoration(
                                       color: _timeSpan == orderFrequency[0]
-                                          ?  MyColor.commonColorSet2
-                                          : Theme.of(context).brightness !=Brightness.light
-                                              ?  MyColor.darkModeLightcolor
+                                          ? MyColor.commonColorSet2
+                                          : Theme.of(context).brightness !=
+                                                  Brightness.light
+                                              ? MyColor.darkModeLightcolor
                                               : MyColor.mainColorWithBlack,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(8),
@@ -511,7 +536,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                           ? MyColor.commonColorSet2
                                           : Theme.of(context).brightness !=
                                                   Brightness.light
-                                              ? Color.fromRGBO(63, 76, 84, 1) 
+                                              ? Color.fromRGBO(63, 76, 84, 1)
                                               : MyColor.mainColorWithBlack,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(8),
@@ -544,10 +569,71 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                 SizedBox(
                                   width: 11,
                                 ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     selectionMode.value =
+                                //         DateRangePickerSelectionMode.range;
+                                //     appState.carts.value[widget.index]
+                                //         .orderFrequency = orderFrequency[2];
+                                //     appState.carts.notifyListeners();
+                                //     localDataStorage.updateProduct(
+                                //         appState.carts.value[widget.index],
+                                //         appState.carts.value[widget.index].id!);
+                                //     setState(() {
+                                //       _timeSpan = orderFrequency[2];
+                                //     });
+                                //   },
+                                //   child: Container(
+                                //     height: 36,
+                                //     width: size.width * 0.23,
+                                //     decoration: BoxDecoration(
+                                //       color: _timeSpan == orderFrequency[2]
+                                //           ? MyColor.commonColorSet2
+                                //           : Theme.of(context).brightness !=
+                                //                   Brightness.light
+                                //               ? Color.fromRGBO(63, 76, 84, 1)
+                                //               : MyColor.mainColorWithBlack,
+                                //       borderRadius: BorderRadius.all(
+                                //         Radius.circular(8),
+                                //       ),
+                                //     ),
+                                //     child: Center(
+                                //       child: Text(
+                                //         UtilsHelper.getString(
+                                //             context, 'weekly'),
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .headlineMedium
+                                //             ?.copyWith(
+                                //                 fontFamily: !UtilsHelper
+                                //                         .rightHandLang
+                                //                         .contains(lang)
+                                //                     ? UtilsHelper
+                                //                         .wr_default_font_family
+                                //                     : UtilsHelper
+                                //                         .the_sans_font_family,
+                                //                 fontSize: 14,
+                                //                 color: _timeSpan ==
+                                //                         orderFrequency[2]
+                                //                     ? MyColor
+                                //                         .textPrimaryLightColor
+                                //                     : Color(0xffA6BCD0)),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     selectionMode.value =
-                                        DateRangePickerSelectionMode.range;
+                                        DateRangePickerSelectionMode.multiple;
                                     appState.carts.value[widget.index]
                                         .orderFrequency = orderFrequency[2];
                                     appState.carts.notifyListeners();
@@ -566,7 +652,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                           ? MyColor.commonColorSet2
                                           : Theme.of(context).brightness !=
                                                   Brightness.light
-                                              ? Color.fromRGBO(63, 76, 84, 1) 
+                                              ? Color.fromRGBO(63, 76, 84, 1)
                                               : MyColor.mainColorWithBlack,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(8),
@@ -575,7 +661,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                     child: Center(
                                       child: Text(
                                         UtilsHelper.getString(
-                                            context, 'weekly'),
+                                            context, 'Flexible'),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium
@@ -597,18 +683,13 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                                SizedBox(
+                                  width: 11,
+                                ),
                                 GestureDetector(
-                                  onTap: () async {
+                                  onTap: () {
                                     selectionMode.value =
-                                        DateRangePickerSelectionMode.multiple;
+                                        DateRangePickerSelectionMode.range;
                                     appState.carts.value[widget.index]
                                         .orderFrequency = orderFrequency[3];
                                     appState.carts.notifyListeners();
@@ -621,68 +702,13 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                   },
                                   child: Container(
                                     height: 36,
-                                    width: size.width * 0.23,
+                                    width: size.width * 0.49,
                                     decoration: BoxDecoration(
                                       color: _timeSpan == orderFrequency[3]
                                           ? MyColor.commonColorSet2
                                           : Theme.of(context).brightness !=
                                                   Brightness.light
-                                              ? Color.fromRGBO(63, 76, 84, 1) 
-                                              : MyColor.mainColorWithBlack,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        UtilsHelper.getString(
-                                            context, 'monthly'),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium
-                                            ?.copyWith(
-                                                fontFamily: !UtilsHelper
-                                                        .rightHandLang
-                                                        .contains(lang)
-                                                    ? UtilsHelper
-                                                        .wr_default_font_family
-                                                    : UtilsHelper
-                                                        .the_sans_font_family,
-                                                fontSize: 14,
-                                                color: _timeSpan ==
-                                                        orderFrequency[3]
-                                                    ? MyColor
-                                                        .textPrimaryLightColor
-                                                    : Color(0xffA6BCD0)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 11,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    selectionMode.value =
-                                        DateRangePickerSelectionMode.range;
-                                    appState.carts.value[widget.index]
-                                        .orderFrequency = orderFrequency[4];
-                                    appState.carts.notifyListeners();
-                                    localDataStorage.updateProduct(
-                                        appState.carts.value[widget.index],
-                                        appState.carts.value[widget.index].id!);
-                                    setState(() {
-                                      _timeSpan = orderFrequency[4];
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 36,
-                                    width: size.width * 0.49,
-                                    decoration: BoxDecoration(
-                                      color: _timeSpan == orderFrequency[4]
-                                          ? MyColor.commonColorSet2
-                                          : Theme.of(context).brightness !=Brightness.light
-                                              ? Color.fromRGBO(63, 76, 84, 1) 
+                                              ? Color.fromRGBO(63, 76, 84, 1)
                                               : MyColor.mainColorWithBlack,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(8),
@@ -705,7 +731,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                         .the_sans_font_family,
                                                 fontSize: 14,
                                                 color: _timeSpan ==
-                                                        orderFrequency[4]
+                                                        orderFrequency[3]
                                                     ? MyColor
                                                         .textPrimaryLightColor
                                                     : Color(0xffA6BCD0)),
@@ -720,12 +746,14 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                         SizedBox(
                           height: 14,
                         ),
-                        _timeSpan == orderFrequency[4]
+                        _timeSpan == orderFrequency[3]
                             ? Row(
                                 children: [
-                                  Icon(Icons.info_outline,color: Theme.of(context).brightness == Brightness.dark
-                                   ? Color(0xffF0F4F8)
-                                  : MyColor.commonColorSet1),
+                                  Icon(Icons.info_outline,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Color(0xffF0F4F8)
+                                          : MyColor.commonColorSet1),
                                   SizedBox(width: 10),
                                   Expanded(
                                     child: Container(
@@ -746,9 +774,11 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                   : UtilsHelper
                                                       .the_sans_font_family,
                                               fontSize: 12,
-                                              color: Theme.of(context).brightness == Brightness.dark
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
                                                   ? Color(0xffF0F4F8)
-                                                  :MyColor.commonColorSet1,
+                                                  : MyColor.commonColorSet1,
                                             ),
                                       ),
                                     ),
@@ -777,18 +807,23 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                   : UtilsHelper
                                                       .the_sans_font_family,
                                               fontSize: 14,
-                                              color:dark(context) ? Colors.white : MyColor.commonColorSet1,
+                                              color: dark(context)
+                                                  ? Colors.white
+                                                  : MyColor.commonColorSet1,
                                               fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   SizedBox(height: 8),
                                   WeekdaySelector(
                                     disabledShape: CircleBorder(
-                                      side: BorderSide(width: 1,color: Colors.white)
-                                    ),
-                                    selectedColor:Colors.white ,
-                                    selectedFillColor: Theme.of(context).brightness == Brightness.dark
-                                    ? MyColor.commonColorSet2 : MyColor.commonColorSet1,
+                                        side: BorderSide(
+                                            width: 1, color: Colors.white)),
+                                    selectedColor: Colors.white,
+                                    selectedFillColor:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? MyColor.commonColorSet2
+                                            : MyColor.commonColorSet1,
                                     onChanged: (int day) {
                                       setState(() {
                                         // Use module % 7 as Sunday's index in the array is 0 and
@@ -835,7 +870,9 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                     : UtilsHelper
                                                         .the_sans_font_family,
                                                 fontSize: 12,
-                                                color: dark(context) ? Colors.white : MyColor.black,
+                                                color: dark(context)
+                                                    ? Colors.white
+                                                    : MyColor.black,
                                                 fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(width: 8),
@@ -868,18 +905,47 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color:appState.carts.value[widget.index].days != null ?
-                                              appState.carts.value[widget.index].days!.length != 2 ?
-                                             MyColor.commonColorSet2 : Colors.transparent : Colors.transparent,
+                                              color: appState
+                                                          .carts
+                                                          .value[widget.index]
+                                                          .days !=
+                                                      null
+                                                  ? appState
+                                                              .carts
+                                                              .value[
+                                                                  widget.index]
+                                                              .days!
+                                                              .length !=
+                                                          2
+                                                      ? MyColor.commonColorSet2
+                                                      : Colors.transparent
+                                                  : Colors.transparent,
                                               border: Border.all(
-                                              color: appState.carts.value[widget.index].days != null ?
-                                              appState.carts.value[widget.index].days!.length != 2 ? 
-                                               Colors.transparent
-                                              : dark(context) ?
-                                              Colors.white.withOpacity(0.2)
-                                              : Colors.grey.withOpacity(0.5) :Colors.transparent ),
-                                              borderRadius: BorderRadius.all(Radius.circular(40))),
-                                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                  color: appState
+                                                              .carts
+                                                              .value[
+                                                                  widget.index]
+                                                              .days !=
+                                                          null
+                                                      ? appState
+                                                                  .carts
+                                                                  .value[widget
+                                                                      .index]
+                                                                  .days!
+                                                                  .length !=
+                                                              2
+                                                          ? Colors.transparent
+                                                          : dark(context)
+                                                              ? Colors.white
+                                                                  .withOpacity(
+                                                                      0.2)
+                                                              : Colors.grey.withOpacity(
+                                                                  0.5)
+                                                      : Colors.transparent),
+                                              borderRadius:
+                                                  BorderRadius.all(Radius.circular(40))),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 6),
                                           child: Text(
                                             UtilsHelper.getString(
                                                 context, "weekdays"),
@@ -895,13 +961,26 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                         : UtilsHelper
                                                             .the_sans_font_family,
                                                     fontSize: 10,
-                                                    color:  dark(context) ? appState.carts.value[widget.index]
-                                                 .days != null && appState.carts.value[widget.index]
-                                                 .days!.length != 2 ? MyColor.white :Colors.white.withOpacity(0.5)
-                                                  : appState.carts.value[widget.index].days != null && appState.carts.value[widget.index].days!.length != 2 
-                                                  ? MyColor.white :  MyColor.black!.withOpacity(0.5),
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    color: dark(context)
+                                                        ? appState.carts.value[widget.index].days !=
+                                                                    null &&
+                                                                appState.carts.value[widget.index].days!.length !=
+                                                                    2
+                                                            ? MyColor.white
+                                                            : Colors.white
+                                                                .withOpacity(
+                                                                    0.5)
+                                                        : appState.carts.value[widget.index].days !=
+                                                                    null &&
+                                                                appState
+                                                                        .carts
+                                                                        .value[widget.index]
+                                                                        .days!
+                                                                        .length !=
+                                                                    2
+                                                            ? MyColor.white
+                                                            : MyColor.black!.withOpacity(0.5),
+                                                    fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
@@ -935,39 +1014,73 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color:  appState.carts.value[widget.index].days != null && appState.carts.value[widget.index].days!.length == 2
-                                                  ? MyColor.commonColorSet2 as Color 
-                                                  :Colors.transparent,
+                                              color:
+                                                  appState.carts.value[widget.index].days !=
+                                                              null &&
+                                                          appState
+                                                                  .carts
+                                                                  .value[widget
+                                                                      .index]
+                                                                  .days!
+                                                                  .length ==
+                                                              2
+                                                      ? MyColor.commonColorSet2
+                                                          as Color
+                                                      : Colors.transparent,
                                               border: Border.all(
-                                                  color: appState.carts.value[widget.index].days != null && appState.carts.value[widget.index]
-                                              .days!.length == 2 ? dark(context) ? Colors.transparent : Colors.transparent : 
-                                              dark(context) ? MyColor.white!.withOpacity(0.5) : Colors.grey!.withOpacity(0.5)),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(40))),
+                                                  color: appState
+                                                                  .carts
+                                                                  .value[widget
+                                                                      .index]
+                                                                  .days !=
+                                                              null &&
+                                                          appState
+                                                                  .carts
+                                                                  .value[widget.index]
+                                                                  .days!
+                                                                  .length ==
+                                                              2
+                                                      ? dark(context)
+                                                          ? Colors.transparent
+                                                          : Colors.transparent
+                                                      : dark(context)
+                                                          ? MyColor.white!.withOpacity(0.5)
+                                                          : Colors.grey!.withOpacity(0.5)),
+                                              borderRadius: BorderRadius.all(Radius.circular(40))),
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 12, vertical: 6),
                                           child: Text(
-                                            UtilsHelper.getString(
-                                                context, "weekend"),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headlineMedium
-                                                ?.copyWith(
-                                                    fontFamily: !UtilsHelper
-                                                            .rightHandLang
-                                                            .contains(lang)
-                                                        ? UtilsHelper
-                                                            .wr_default_font_family
-                                                        : UtilsHelper
-                                                            .the_sans_font_family,
-                                                    fontSize: 10,
-                                                    color:   appState.carts.value[widget.index].days != null && appState.carts.value[widget.index]
-                                              .days!.length == 2 ?  Colors.white  :  
-                                                dark(context) ? Colors.white
-                                                  : MyColor.black!.withOpacity(0.5),
-                                                    fontWeight:
-                                                        FontWeight.bold)
-                                          ),
+                                              UtilsHelper.getString(
+                                                  context, "weekend"),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium
+                                                  ?.copyWith(
+                                                      fontFamily: !UtilsHelper
+                                                              .rightHandLang
+                                                              .contains(lang)
+                                                          ? UtilsHelper
+                                                              .wr_default_font_family
+                                                          : UtilsHelper
+                                                              .the_sans_font_family,
+                                                      fontSize: 10,
+                                                      color: appState
+                                                                      .carts
+                                                                      .value[widget
+                                                                          .index]
+                                                                      .days !=
+                                                                  null &&
+                                                              appState
+                                                                      .carts
+                                                                      .value[widget.index]
+                                                                      .days!
+                                                                      .length ==
+                                                                  2
+                                                          ? Colors.white
+                                                          : dark(context)
+                                                              ? Colors.white
+                                                              : MyColor.black!.withOpacity(0.5),
+                                                      fontWeight: FontWeight.bold)),
                                         ),
                                       ),
                                     ],
@@ -1010,7 +1123,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                             .brightness ==
                                                         Brightness.light
                                                     ? MyColor.commonColorSet1
-                                                    :  Colors.white ,
+                                                    : Colors.white,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -1039,7 +1152,9 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                       textDirection:
                                                           TextDirection.ltr,
                                                       size: 15,
-                                                      color: dark(context) ? Colors.white : null,
+                                                      color: dark(context)
+                                                          ? Colors.white
+                                                          : null,
                                                     ),
                                                   ),
                                                 ),
@@ -1059,8 +1174,11 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                                   null
                                                               ? _dateRangePickerController
                                                                       .displayDate!
-                                                                      .month -1
-                                                              : DateTime.now().month-1]) +
+                                                                      .month -
+                                                                  1
+                                                              : DateTime.now()
+                                                                      .month -
+                                                                  1]) +
                                                       " ${_dateRangePickerController.displayDate?.year ?? DateTime.now().year}"
                                                           .toUpperCase(),
                                                   style: Theme.of(context)
@@ -1076,14 +1194,13 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                               : UtilsHelper
                                                                   .the_sans_font_family,
                                                           fontSize: 12,
-                                                          color: Theme.of(
-                                                                          context)
+                                                          color: Theme.of(context)
                                                                       .brightness ==
                                                                   Brightness
                                                                       .light
                                                               ? MyColor
                                                                   .commonColorSet1
-                                                              :  Colors.white ,
+                                                              : Colors.white,
                                                           fontWeight:
                                                               FontWeight.w400),
                                                 ),
@@ -1110,7 +1227,9 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                                     child: Icon(
                                                         Icons.arrow_forward,
                                                         size: 15,
-                                                        color:  dark(context) ? Colors.white :null,
+                                                        color: dark(context)
+                                                            ? Colors.white
+                                                            : null,
                                                         textDirection:
                                                             TextDirection.ltr),
                                                   ),
@@ -1302,13 +1421,12 @@ class _CartProductWidgetState extends State<CartProductWidget> {
             ],
           )
         : Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-             color: Theme.of(context).brightness == Brightness.light
-                        ? Color(0xffF0F4F8)
-                        :Color.fromRGBO(30, 43, 51, 1),
-          ),
-          
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Color(0xffF0F4F8)
+                  : Color.fromRGBO(30, 43, 51, 1),
+            ),
             margin: EdgeInsets.only(
                 right: lang == 'en' ? 6 : 0, left: lang != 'en' ? 6 : 0),
             child: InkWell(
@@ -1317,67 +1435,71 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                 setState(() {});
               },
               child: ClipRRect(
-                 borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8),
                 child: Container(
                   height: 80,
-                   padding:EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.symmetric(vertical: 8),
                   // constraints: BoxConstraints(minHeight: 60),
                   width: size.width - 60,
                   decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Container(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                       SizedBox(width: 8),
-                      ClipRRect(
-                        
-                        child: Container(
-                           width: 60,
-                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: CachedNetworkImageProvider(
-                                Urls.getImageUrlFromName(widget.product!.image ?? ""),
-                              ))
-                           ),
+                        SizedBox(width: 8),
+                        ClipRRect(
+                          child: Container(
+                            width: 60,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: CachedNetworkImageProvider(
+                                      Urls.getImageUrlFromName(
+                                          widget.product!.image ?? ""),
+                                    ))),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: Container(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                              SizedBox(height: 3),
+                                SizedBox(height: 3),
                                 Row(
-                                children: [
-                                            Expanded(
-                                              child: Text(
-                                                widget.product!.name!,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .displaySmall
-                                                    ?.copyWith(
-                                                      fontFamily: !UtilsHelper.rightHandLang.contains(lang)
-                                                          ? UtilsHelper.wr_default_font_family
-                                                          : UtilsHelper.the_sans_font_family,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Theme.of(context).brightness ==Brightness.light
-                                                          ? MyColor.commonColorSet1
-                                                          : MyColor.white,
-                                                    ),
-                                              ),
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        widget.product!.name!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displaySmall
+                                            ?.copyWith(
+                                              fontFamily: !UtilsHelper
+                                                      .rightHandLang
+                                                      .contains(lang)
+                                                  ? UtilsHelper
+                                                      .wr_default_font_family
+                                                  : UtilsHelper
+                                                      .the_sans_font_family,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? MyColor.commonColorSet1
+                                                  : MyColor.white,
                                             ),
-                                          ],
-                                        ),
-                                Spacer( ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Spacer(),
                                 Text(
                                   (widget.product!.discountPrice != null &&
                                           widget.product!.discountPrice! > 0)
@@ -1404,7 +1526,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                             ),
                           ),
                         ),
-                          IconButton(
+                        IconButton(
                           onPressed: () {
                             appState.removeProductFromCart(widget.product!);
                           },
@@ -1418,7 +1540,8 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                             child: Center(
                               child: SvgPicture.asset(
                                 "assets/edit_delete.svg",
-                                colorFilter:ColorFilter.mode(Colors.red,BlendMode.srcIn),
+                                colorFilter: ColorFilter.mode(
+                                    Colors.red, BlendMode.srcIn),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
@@ -1428,15 +1551,17 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                           height: 8,
                           padding: EdgeInsets.only(left: 10, right: 10),
                           child: RotatedBox(
-                              quarterTurns: 3,
-                              child: SvgPicture.asset(
-                                "assets/icon-chevron.svg",
-                                fit: BoxFit.fitHeight,
-                                width: 8,
-                           colorFilter:ColorFilter.mode( MyColor.binBackground as Color,BlendMode.srcIn),
-                          ),  ),
+                            quarterTurns: 3,
+                            child: SvgPicture.asset(
+                              "assets/icon-chevron.svg",
+                              fit: BoxFit.fitHeight,
+                              width: 8,
+                              colorFilter: ColorFilter.mode(
+                                  MyColor.binBackground as Color,
+                                  BlendMode.srcIn),
+                            ),
+                          ),
                         ),
-                      
                         SizedBox(width: 8)
                       ],
                     ),
@@ -1455,10 +1580,10 @@ class _CartProductWidgetState extends State<CartProductWidget> {
       case 'daily':
         selectionMode.value = DateRangePickerSelectionMode.range;
         break;
-      case 'weekly':
-        selectionMode.value = DateRangePickerSelectionMode.range;
-        break;
-      case 'monthly':
+      // case 'weekly':
+      //   selectionMode.value = DateRangePickerSelectionMode.range;
+      //   break;
+      case 'flexible':
         selectionMode.value = DateRangePickerSelectionMode.multiple;
         break;
       case 'alternative':

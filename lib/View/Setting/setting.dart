@@ -85,7 +85,6 @@ class _SettingsState extends StateMVC<Settings> {
                             prefixPath: "assets/icon_orders.svg",
                             title: UtilsHelper.getString(context, 'your_order'),
                             lang: lang,
-                            
                             onPress: () {
                               Navigator.of(context)
                                   .pushNamed(RoutePath.your_orders);
@@ -95,27 +94,27 @@ class _SettingsState extends StateMVC<Settings> {
                             height: 4,
                           ),
                           ValueListenableBuilder(
-                            valueListenable: darkMode,
-                            builder: (context,mode,child) {
-                              return settingRow(
-                                prefixPath: "assets/bulb_icon.svg",
-                                title: UtilsHelper.getString(context, 'dark_mode'),
-                                lang: lang,
-                                suffixWidget: CustomSwitch(
-                                  isDark: darkMode.value,
-                                ),
-                                // Switch(
-                                //     value: _isDark,
-                                //     onChanged: (e) {
-                                //       print(e);
-                                //       setState(() {
-                                //         _isDark = e;
-                                //       });
-                                //     }),
-                                onPress: () {},
-                              );
-                            }
-                          ),
+                              valueListenable: darkMode,
+                              builder: (context, mode, child) {
+                                return settingRow(
+                                  prefixPath: "assets/bulb_icon.svg",
+                                  title: UtilsHelper.getString(
+                                      context, 'dark_mode'),
+                                  lang: lang,
+                                  suffixWidget: CustomSwitch(
+                                    isDark: darkMode.value,
+                                  ),
+                                  // Switch(
+                                  //     value: _isDark,
+                                  //     onChanged: (e) {
+                                  //       print(e);
+                                  //       setState(() {
+                                  //         _isDark = e;
+                                  //       });
+                                  //     }),
+                                  onPress: () {},
+                                );
+                              }),
                           SizedBox(
                             height: 4,
                           ),
@@ -123,7 +122,6 @@ class _SettingsState extends StateMVC<Settings> {
                             prefixPath: "assets/offers.svg",
                             title: UtilsHelper.getString(context, 'offers'),
                             lang: lang,
-                            
                             onPress: () {
                               Navigator.of(context).pushNamed(RoutePath.offers);
                             },
@@ -135,7 +133,6 @@ class _SettingsState extends StateMVC<Settings> {
                             prefixPath: "assets/wallet_icon.svg",
                             title: UtilsHelper.getString(context, 'balance'),
                             lang: lang,
-                            
                             onPress: () {
                               Navigator.of(context)
                                   .pushNamed(RoutePath.wallet_screen);
@@ -148,9 +145,9 @@ class _SettingsState extends StateMVC<Settings> {
                             prefixPath: "assets/about_icon.svg",
                             title: UtilsHelper.getString(context, 'about_us'),
                             lang: lang,
-                            
                             onPress: () {
-                              Navigator.of(context).pushNamed(RoutePath.about_us);
+                              Navigator.of(context)
+                                  .pushNamed(RoutePath.about_us);
                             },
                           ),
                           SizedBox(
@@ -160,7 +157,6 @@ class _SettingsState extends StateMVC<Settings> {
                             prefixPath: "assets/messaging.svg",
                             title: UtilsHelper.getString(context, 'contact_us'),
                             lang: lang,
-                            
                             onPress: () {
                               contactUsBottomSheet(lang: lang);
                             },
@@ -173,10 +169,21 @@ class _SettingsState extends StateMVC<Settings> {
                             title: UtilsHelper.getString(
                                 context, 'term_and_condition'),
                             lang: lang,
-                            
                             onPress: () {
                               Navigator.of(context)
                                   .pushNamed(RoutePath.term_and_condition);
+                            },
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          settingRow(
+                            prefixPath: "assets/terms_icon.svg",
+                            title: UtilsHelper.getString(context, 'Reach Us'),
+                            lang: lang,
+                            onPress: () {
+                              Navigator.of(context)
+                                  .pushNamed(RoutePath.reach_us);
                             },
                           ),
                           SizedBox(
@@ -186,7 +193,6 @@ class _SettingsState extends StateMVC<Settings> {
                             prefixPath: "assets/internet.svg",
                             title: UtilsHelper.getString(context, 'language'),
                             lang: lang,
-                            
                             onPress: () {
                               selectLanguageBottomSheet(lang: lang);
                             },
@@ -201,7 +207,7 @@ class _SettingsState extends StateMVC<Settings> {
                             onPress: () {
                               AuthController authController = AuthController();
                               FirebaseAuth.instance.signOut();
-                             // logoutLocalUser();
+                              // logoutLocalUser();
                               authController.userLogoutApiCall(context);
                               //  Navigator.of(context).pushNamedAndRemoveUntil(
                               //    RoutePath.sign_in, (Route<dynamic> route) => false);
@@ -217,9 +223,7 @@ class _SettingsState extends StateMVC<Settings> {
                 ),
               ],
             ),
-            Positioned(
-              bottom: 0,
-              child: bottomNavBar(context: context)),
+            Positioned(bottom: 0, child: bottomNavBar(context: context)),
           ],
         ),
       ),
@@ -240,10 +244,10 @@ class _SettingsState extends StateMVC<Settings> {
           borderRadius: BorderRadius.circular(20),
           child: SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 30,horizontal: 26),
+              margin: EdgeInsets.symmetric(vertical: 30, horizontal: 26),
               decoration: BoxDecoration(
-                 color: MyColor.coreBackgroundColor,
-                 borderRadius: BorderRadius.circular(20),
+                color: MyColor.coreBackgroundColor,
+                borderRadius: BorderRadius.circular(20),
               ),
               // padding: EdgeInsets.only(top: 43),
               padding: MediaQuery.of(context).viewInsets,
@@ -273,8 +277,7 @@ class _SettingsState extends StateMVC<Settings> {
                   SizedBox(
                     height: 30,
                   ),
-                  wrTextField(
-                    context,
+                  wrTextField(context,
                       controller: _nameController,
                       placeholder: UtilsHelper.getString(context, 'your_name'),
                       prefixPath: "assets/user.svg",
@@ -307,13 +310,17 @@ class _SettingsState extends StateMVC<Settings> {
                     ],
                     onvalidate: (p0) {
                       if (p0!.isEmpty) {
-                         return UtilsHelper.getString(context, 'mobile_number_is_required');
-                      } else if(p0.isNotEmpty && (p0.length < 6 && p0.length > 10)){
-                         return UtilsHelper.getString(context, 'valid_mobile_number_is_required');
+                        return UtilsHelper.getString(
+                            context, 'mobile_number_is_required');
+                      } else if (p0.isNotEmpty &&
+                          (p0.length < 6 && p0.length > 10)) {
+                        return UtilsHelper.getString(
+                            context, 'valid_mobile_number_is_required');
                       }
                       return null;
                     },
-                    placeholder:UtilsHelper.getString(context, 'mobile_number'),
+                    placeholder:
+                        UtilsHelper.getString(context, 'mobile_number'),
                     prefixPath: "assets/phone.svg",
                     lang: lang,
                   ),
@@ -322,11 +329,14 @@ class _SettingsState extends StateMVC<Settings> {
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 10, right: 10),
-                    
                     margin: EdgeInsets.symmetric(horizontal: 30),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: dark(context) ? Color.fromRGBO(63, 76, 84, 1) : MyColor.lightBackground),
+                      borderRadius: BorderRadius.circular(5),
+                      color: MyColor.white,
+                      // dark(context)
+                      //     ? Color.fromRGBO(63, 76, 84, 1)
+                      //     : MyColor.lightBackground
+                    ),
                     child: TextFormField(
                       onTap: () {},
                       controller: _noteController,
@@ -350,7 +360,9 @@ class _SettingsState extends StateMVC<Settings> {
                           fontFamily: !UtilsHelper.rightHandLang.contains(lang)
                               ? UtilsHelper.wr_default_font_family
                               : UtilsHelper.the_sans_font_family,
-                          color: dark(context)? MyColor.white : MyColor.baseDarkColor,
+                          color: dark(context)
+                              ? MyColor.white
+                              : MyColor.baseDarkColor,
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
                         ),
@@ -417,17 +429,17 @@ class _SettingsState extends StateMVC<Settings> {
       builder: (context) {
         return ClipRRect(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 26,vertical: 30),
+            margin: EdgeInsets.symmetric(horizontal: 26, vertical: 30),
             padding: EdgeInsets.symmetric(
               vertical: 30,
               horizontal: 24,
             ),
-           decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(20),
-             color: Theme.of(context).brightness == Brightness.light
-                ? Colors.white
-                : MyColor.mainColor,
-           ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : MyColor.mainColor,
+            ),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -461,15 +473,17 @@ class _SettingsState extends StateMVC<Settings> {
                                   print(languageItem.languageName);
                                   appState.languageItem = languageItem;
                                   final get = GetStorage();
-                                  get.write("language", languageItem.languageCode);
-                                  appState.currentLanguageCode.value =languageItem.languageCode!;
+                                  get.write(
+                                      "language", languageItem.languageCode);
+                                  appState.currentLanguageCode.value =
+                                      languageItem.languageCode!;
                                   showLoader();
                                   appState.languageKeys =
                                       await settingRepo.getKeysLists(
                                           appState.currentLanguageCode.value);
-                                            print(appState.languageKeys);
-                                     print("appState.currentLanguageCode.value");
-                                    print(appState.currentLanguageCode.value);
+                                  print(appState.languageKeys);
+                                  print("appState.currentLanguageCode.value");
+                                  print(appState.currentLanguageCode.value);
                                   hideLoader();
                                   setState(() {});
                                   // EasyLocalization.of(context)?.setLocale(
@@ -482,9 +496,11 @@ class _SettingsState extends StateMVC<Settings> {
                                 },
                                 prefixPath: 'assets/icon_arrow.svg',
                                 title: languageItem.languageName!.toUpperCase(),
-                                borderColor:appState.currentLanguageCode.value ==
-                                        languageItem.languageCode
-                                    ?  MyColor.coreBackgroundColor : Colors.white38,
+                                borderColor:
+                                    appState.currentLanguageCode.value ==
+                                            languageItem.languageCode
+                                        ? MyColor.coreBackgroundColor
+                                        : Colors.white38,
                                 textStyle: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
@@ -497,11 +513,14 @@ class _SettingsState extends StateMVC<Settings> {
                                     ),
                                 color: appState.currentLanguageCode.value ==
                                         languageItem.languageCode
-                                    ?  MyColor.commonColorSet1
+                                    ? MyColor.commonColorSet1
                                     : MyColor.commonColorSet2,
                               ),
                               SizedBox(
-                                height: index  == setting.value.languages!.length -1 ? 0 : 20,
+                                height:
+                                    index == setting.value.languages!.length - 1
+                                        ? 0
+                                        : 20,
                               ),
                             ],
                           );
@@ -578,10 +597,9 @@ class _SettingsState extends StateMVC<Settings> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-               padding: EdgeInsets.only(right: !UtilsHelper.rightHandLang.contains(lang)
-                ? 6 : 18,
-                left:!UtilsHelper.rightHandLang.contains(lang)
-                ? 18 : 6),
+                padding: EdgeInsets.only(
+                    right: !UtilsHelper.rightHandLang.contains(lang) ? 6 : 18,
+                    left: !UtilsHelper.rightHandLang.contains(lang) ? 18 : 6),
                 child: Center(
                   child: RotatedBox(
                     quarterTurns: 0,
@@ -610,23 +628,29 @@ class _SettingsState extends StateMVC<Settings> {
                                           : UtilsHelper.the_sans_font_family,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
-                                  color:dark(context)==false ? hexToRgb('#5F6D79')  : MyColor.textPrimaryDarkColor
-                                      ?.withOpacity(0.8),
+                                  color: dark(context) == false
+                                      ? hexToRgb('#5F6D79')
+                                      : MyColor.textPrimaryDarkColor
+                                          ?.withOpacity(0.8),
                                 ),
                       ),
                       // Icon(Icons.keyboard_arrow_down),
-                      suffixWidget != null ? suffixWidget  : Padding(
-                        padding: const EdgeInsets.only(left: 12),
-                        child: RotatedBox(
-                                quarterTurns: !UtilsHelper.rightHandLang.contains(lang)
-                                    ? 2
-                                    : 0,
+                      suffixWidget != null
+                          ? suffixWidget
+                          : Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: RotatedBox(
+                                quarterTurns:
+                                    !UtilsHelper.rightHandLang.contains(lang)
+                                        ? 2
+                                        : 0,
                                 child: SvgPicture.asset(
                                   'assets/icon-chevron.svg',
-                                  color: MyColor.textPrimaryColor?.withOpacity(0.5),
+                                  color: MyColor.textPrimaryColor
+                                      ?.withOpacity(0.5),
                                 ),
                               ),
-                      ),
+                            ),
                     ],
                   ),
                 ),

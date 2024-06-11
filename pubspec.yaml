@@ -70,6 +70,7 @@ dependencies:
   url_launcher: ^6.1.12
   webview_flutter: ^3.0.4
   stripe_checkout: ^1.0.2
+  geolocator: ^10.1.0
   
 dev_dependencies:
   flutter_test:

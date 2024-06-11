@@ -27,6 +27,7 @@ Future<HomeData> getHomeProductList({String? nexrtUrl}) async {
       throw new Exception(response.data);
     }
   } on d.DioException catch (e) {
+    print("This is error $e");
     throw handleError(e);
   }
 }

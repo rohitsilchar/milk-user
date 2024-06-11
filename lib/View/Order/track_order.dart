@@ -46,7 +46,8 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
     final size = MediaQuery.of(context).size;
     var lang = appState.currentLanguageCode.value;
 
-    List _bookedProduct = [ //Todo: it should be delete
+    List _bookedProduct = [
+      //Todo: it should be delete
       {
         "title": UtilsHelper.getString(context, 'no_of_items'),
         "size": UtilsHelper.getString(context, 'static_size'),
@@ -60,24 +61,31 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
     ];
 
     List _orderDetails = [];
-    Map<String, List<ProductOrder>> productDateMap = Map<String, List<ProductOrder>>();
-    if(con.orderListItem!=null) {
+    Map<String, List<ProductOrder>> productDateMap =
+        Map<String, List<ProductOrder>>();
+    if (con.orderListItem != null) {
       _orderDetails = [
         {
           "title": UtilsHelper.getString(context, 'delivery_address'),
-          "description": con.orderListItem?.deliveryAddress?.getFormattedAddress()??"-"
+          "description":
+              con.orderListItem?.deliveryAddress?.getFormattedAddress() ?? "-"
         },
         {
           "title": UtilsHelper.getString(context, 'phone_number'),
-          "description": appState.userModel.phone??"-"
+          "description": appState.userModel.phone ?? "-"
         },
         {
           "title": UtilsHelper.getString(context, 'delivery_time'),
-          "description": setting.value.timeslots!.firstWhere((element) => element.id==con.orderListItem!.timeslotId, orElse: ()=>Timeslot()).getDisplayStr(context)
+          "description": setting.value.timeslots!
+              .firstWhere(
+                  (element) => element.id == con.orderListItem!.timeslotId,
+                  orElse: () => Timeslot())
+              .getDisplayStr(context)
         },
         {
           "title": UtilsHelper.getString(context, 'payment_method'),
-          "description": UtilsHelper.getString(context, con.orderListItem!.paymentMethod!)
+          "description":
+              UtilsHelper.getString(context, con.orderListItem!.paymentMethod!)
         },
         {
           "title": UtilsHelper.getString(context, 'order_time'),
@@ -86,22 +94,24 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
       ];
       isAnyDeliveryRemaining = false;
       List<ProductOrder> productOrders = con.orderListItem!.productOrders!;
-      productDateMap = Map<String, List<ProductOrder>>(); ///initialize
+      productDateMap = Map<String, List<ProductOrder>>();
 
-      for(int i=0; i<productOrders.length; i++) {
-          for(int j=0; j<productOrders[i].productDeliverys!.length; j++) {
-            ProductDelivery pd = productOrders[i].productDeliverys![j];
-            if(productDateMap.containsKey(pd.getDeliveryDateString())) {
-              productDateMap[pd.getDeliveryDateString()]!.add(productOrders[i]);
-            } else {
-              productDateMap[pd.getDeliveryDateString()] = [productOrders[i]];
-            }
-            if(pd.deliveryDate!=null && calculateDifference(pd.deliveryDate!)>0) {
-              isAnyDeliveryRemaining = true;
-            }
+      ///initialize
+
+      for (int i = 0; i < productOrders.length; i++) {
+        for (int j = 0; j < productOrders[i].productDeliverys!.length; j++) {
+          ProductDelivery pd = productOrders[i].productDeliverys![j];
+          if (productDateMap.containsKey(pd.getDeliveryDateString())) {
+            productDateMap[pd.getDeliveryDateString()]!.add(productOrders[i]);
+          } else {
+            productDateMap[pd.getDeliveryDateString()] = [productOrders[i]];
           }
+          if (pd.deliveryDate != null &&
+              calculateDifference(pd.deliveryDate!) > 0) {
+            isAnyDeliveryRemaining = true;
+          }
+        }
       }
-
     }
 
     return Scaffold(
@@ -135,7 +145,7 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                         Container(
                           height: 31,
                           decoration: BoxDecoration(
-                             color: MyColor.commonColorSet2,
+                            color: MyColor.commonColorSet2,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           width: size.width,
@@ -152,7 +162,12 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                       .textTheme
                                       .headlineMedium
                                       ?.copyWith(
-                                          fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
+                                          fontFamily: !UtilsHelper.rightHandLang
+                                                  .contains(lang)
+                                              ? UtilsHelper
+                                                  .wr_default_font_family
+                                              : UtilsHelper
+                                                  .the_sans_font_family,
                                           fontSize: 12,
                                           color: MyColor.white),
                                 ),
@@ -160,14 +175,20 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                               Container(),
                               Container(
                                 child: Text(
-                                  UtilsHelper.getString(context, 'types_of_order'),
+                                  UtilsHelper.getString(
+                                      context, 'types_of_order'),
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium
                                       ?.copyWith(
-                                          fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
+                                          fontFamily: !UtilsHelper.rightHandLang
+                                                  .contains(lang)
+                                              ? UtilsHelper
+                                                  .wr_default_font_family
+                                              : UtilsHelper
+                                                  .the_sans_font_family,
                                           fontSize: 12,
                                           color: MyColor.white),
                                 ),
@@ -182,7 +203,12 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                       .textTheme
                                       .headlineMedium
                                       ?.copyWith(
-                                          fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
+                                          fontFamily: !UtilsHelper.rightHandLang
+                                                  .contains(lang)
+                                              ? UtilsHelper
+                                                  .wr_default_font_family
+                                              : UtilsHelper
+                                                  .the_sans_font_family,
                                           fontSize: 12,
                                           color: MyColor.white),
                                 ),
@@ -191,148 +217,216 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                           ),
                         ),
                         SizedBox(height: 6),
-                        con.orderListItem == null ?
-                            AddressListShimmer(separatorHeight: 0):
-                        ListView.separated(
-                          shrinkWrap: true,
-                          primary: false,
-                          padding: EdgeInsets.zero,
-                          itemCount: con.orderListItem?.productOrders?.length??0,
-                          separatorBuilder: (context, _index) {
-                            return SizedBox(height: 4);
-                          },
-                          itemBuilder: (context, index) {
-                            ProductOrder productOrder = con.orderListItem!.productOrders![index];
-                            return Container(
-                              height: 60,
-                              width: size.width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                textDirection: TextDirection.ltr,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                        left: 0,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(8),
-                                            child: Container(
-                                              width: 50,
-                                              height: 50,
-                                              color: MyColor.coreBackgroundColor,
-                                              child: CacheNetworkImageWidget(
-                                                Urls.getImageUrlFromName(productOrder.product?.image??""),
-                                              ),
+                        con.orderListItem == null
+                            ? AddressListShimmer(separatorHeight: 0)
+                            : ListView.separated(
+                                shrinkWrap: true,
+                                primary: false,
+                                padding: EdgeInsets.zero,
+                                itemCount:
+                                    con.orderListItem?.productOrders?.length ??
+                                        0,
+                                separatorBuilder: (context, _index) {
+                                  return SizedBox(height: 4);
+                                },
+                                itemBuilder: (context, index) {
+                                  ProductOrder productOrder =
+                                      con.orderListItem!.productOrders![index];
+                                  return Container(
+                                    height: 60,
+                                    width: size.width,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      textDirection: TextDirection.ltr,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                              left: 0,
                                             ),
-                                          ),
-                                          SizedBox(width: 6),
-                                          Expanded(
-                                             flex: 2,
-                                            child: Container(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    child: Row(
+                                            child: Row(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child: Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    color: MyColor
+                                                        .coreBackgroundColor,
+                                                    child:
+                                                        CacheNetworkImageWidget(
+                                                      Urls.getImageUrlFromName(
+                                                          productOrder.product
+                                                                  ?.image ??
+                                                              ""),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 6),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Container(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       children: [
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            productOrder.product?.name??"",
-                                                            maxLines: 3,
-                                                            textAlign: TextAlign.left,
-                                                            style: Theme.of(context)
-                                                                .textTheme
-                                                                .headlineMedium
-                                                                ?.copyWith(
-                                                                    fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                                                    fontSize: 12,
-                                                                    fontWeight: FontWeight.w600,
-                                                                    color: MyColor.subTitle),
+                                                        Container(
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Text(
+                                                                  productOrder
+                                                                          .product
+                                                                          ?.name ??
+                                                                      "",
+                                                                  maxLines: 3,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                                                      fontFamily: !UtilsHelper.rightHandLang.contains(
+                                                                              lang)
+                                                                          ? UtilsHelper
+                                                                              .wr_default_font_family
+                                                                          : UtilsHelper
+                                                                              .the_sans_font_family,
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      color: MyColor
+                                                                          .subTitle),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
+                                                        ),
+                                                        SizedBox(height: 5),
+                                                        Text(
+                                                          UtilsHelper.getString(
+                                                                  context,
+                                                                  'qty') +
+                                                              ": " +
+                                                              productOrder
+                                                                  .quantity
+                                                                  .toString(),
+                                                          maxLines: 1,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .headlineMedium
+                                                              ?.copyWith(
+                                                                  fontFamily: !UtilsHelper
+                                                                          .rightHandLang
+                                                                          .contains(
+                                                                              lang)
+                                                                      ? UtilsHelper
+                                                                          .wr_default_font_family
+                                                                      : UtilsHelper
+                                                                          .the_sans_font_family,
+                                                                  fontSize: 11,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: MyColor
+                                                                      .subTitle),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                  SizedBox(height: 5),
-                                                  Text(
-                                                    UtilsHelper.getString(context, 'qty') + ": " + productOrder.quantity.toString(),
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.center,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headlineMedium
-                                                        ?.copyWith(
-                                                        fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: MyColor.subTitle),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 6,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      productOrder.orderFrequency == "once" ? 
-                                        UtilsHelper.getString(context, productOrder.orderFrequency!):
-                                      UtilsHelper.getString(context, productOrder.orderFrequency!) + getDelivery(productOrder.noOfDelivery!.toString()),
-                                      // maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineMedium
-                                          ?.copyWith(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: MyColor.subTitle),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    // flex: 2,
-                                    child: Container(
+                                        ),
+                                        Container(
+                                          width: 6,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            productOrder.orderFrequency ==
+                                                    "once"
+                                                ? UtilsHelper.getString(
+                                                    context,
+                                                    productOrder
+                                                        .orderFrequency!)
+                                                : UtilsHelper.getString(
+                                                        context,
+                                                        productOrder
+                                                            .orderFrequency!) +
+                                                    getDelivery(productOrder
+                                                        .noOfDelivery!
+                                                        .toString()),
+                                            // maxLines: 1,
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium
+                                                ?.copyWith(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: MyColor.subTitle),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          // flex: 2,
+                                          child: Container(
 //                                margin: lang != 'en'
 //                                    ? EdgeInsets.only(left: 20)
 //                                    : EdgeInsets.zero,
-                                      child: Text(
-                                        productOrder.orderFrequency == "once"?
-                                        getDayFormat(productOrder.startDate, ddMMYYYYFormat):  
-                                        getDayFormat(productOrder.startDate, ddMMYYYYFormat) +" - \n"+ getDayFormat(productOrder.endDate, ddMMYYYYFormat),
-                                        // maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium
-                                            ?.copyWith(
-                                              fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                              fontSize: 12,
-                                              height: 1.6,
-                                              color: MyColor.subTitle,
-                                              fontWeight: FontWeight.w600,
+                                            child: Text(
+                                              productOrder.orderFrequency ==
+                                                      "once"
+                                                  ? getDayFormat(
+                                                      productOrder.startDate,
+                                                      ddMMYYYYFormat)
+                                                  : getDayFormat(
+                                                          productOrder
+                                                              .startDate,
+                                                          ddMMYYYYFormat) +
+                                                      " - \n" +
+                                                      getDayFormat(
+                                                          productOrder.endDate,
+                                                          ddMMYYYYFormat),
+                                              // maxLines: 1,
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium
+                                                  ?.copyWith(
+                                                    fontFamily: !UtilsHelper
+                                                            .rightHandLang
+                                                            .contains(lang)
+                                                        ? UtilsHelper
+                                                            .wr_default_font_family
+                                                        : UtilsHelper
+                                                            .the_sans_font_family,
+                                                    fontSize: 12,
+                                                    height: 1.6,
+                                                    color: MyColor.subTitle,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                             ),
-                                      ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
                         SizedBox(
                           height: 8,
                         ),
@@ -349,9 +443,14 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                               .textTheme
                               .headlineMedium
                               ?.copyWith(
-                              fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                              fontSize: 17,
-                              color: dark(context) ? Colors.white :MyColor.commonColorSet1),
+                                  fontFamily:
+                                      !UtilsHelper.rightHandLang.contains(lang)
+                                          ? UtilsHelper.wr_default_font_family
+                                          : UtilsHelper.the_sans_font_family,
+                                  fontSize: 17,
+                                  color: dark(context)
+                                      ? Colors.white
+                                      : MyColor.commonColorSet1),
                         ),
                         SizedBox(
                           height: 30,
@@ -361,18 +460,21 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                           primary: false,
                           itemCount: productDateMap.keys.length,
                           padding: EdgeInsets.zero,
-                          separatorBuilder: (c,i) {
+                          separatorBuilder: (c, i) {
                             return SizedBox(height: 10);
                           },
                           itemBuilder: (context, index) {
-                            List<String> keysList = productDateMap.keys.toList();
-                            keysList.sort((a,b) => a.compareTo(b));
-                            List<ProductOrder> _productOrderList = productDateMap[keysList[index]]!;
+                            List<String> keysList =
+                                productDateMap.keys.toList();
+                            keysList.sort((a, b) => a.compareTo(b));
+                            List<ProductOrder> _productOrderList =
+                                productDateMap[keysList[index]]!;
                             String _status = "";
                             return SizedBox.fromSize(
                               child: Container(
                                 margin: EdgeInsets.symmetric(vertical: 0),
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
                                 decoration: BoxDecoration(
                                   color: MyColor.coreBackgroundColor,
                                   borderRadius: BorderRadius.all(
@@ -380,14 +482,17 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                   ),
                                 ),
                                 child: Column(
-                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          UtilsHelper.getString(context, "items"),
+                                          UtilsHelper.getString(
+                                              context, "items"),
                                           textAlign: TextAlign.start,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -395,13 +500,20 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                               .textTheme
                                               .headlineMedium
                                               ?.copyWith(
-                                              fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 15,
-                                              color: MyColor.yourOrder),
+                                                  fontFamily: !UtilsHelper
+                                                          .rightHandLang
+                                                          .contains(lang)
+                                                      ? UtilsHelper
+                                                          .wr_default_font_family
+                                                      : UtilsHelper
+                                                          .the_sans_font_family,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                  color: MyColor.yourOrder),
                                         ),
                                         Text(
-                                          UtilsHelper.getString(context, "status"),
+                                          UtilsHelper.getString(
+                                              context, "status"),
                                           textAlign: TextAlign.start,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -409,59 +521,108 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                               .textTheme
                                               .headlineMedium
                                               ?.copyWith(
-                                              fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 15,
-                                              color: MyColor.yourOrder),
+                                                  fontFamily: !UtilsHelper
+                                                          .rightHandLang
+                                                          .contains(lang)
+                                                      ? UtilsHelper
+                                                          .wr_default_font_family
+                                                      : UtilsHelper
+                                                          .the_sans_font_family,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                  color: MyColor.yourOrder),
                                         ),
                                       ],
                                     ),
                                     SizedBox(height: 6),
                                     Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment : MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
                                               Container(
 //                                        height: 30,
-                                                width: MediaQuery.of(context).size.width*0.6,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.6,
                                                 child: ListView.separated(
-                                                  shrinkWrap: true,
-                                                  primary: false,
-                                                  padding: EdgeInsets.zero,
-                                                  physics: NeverScrollableScrollPhysics(),
-                                                  itemCount: _productOrderList.length,
-                                                  separatorBuilder: (c,i) {
-                                                    return SizedBox(height: 6);
-                                                  },
-                                                  itemBuilder: (context, _i) {
-                                                    ProductOrder productOrder = _productOrderList[_i];
-                                                    if (productOrder.productDeliverys!.length>0) {
-                                                      _status = productOrder.productDeliverys!.first.deliveryStatus!.status!;
-                                                    }
-                                                    return productOrder.product != null ?  Text(
-                                                      productOrder.product!.name! + " x " + productOrder.quantity.toString(),
-                                                      textAlign: TextAlign.start,
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headlineMedium
-                                                          ?.copyWith(
-                                                          fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                                          fontSize: 13,
-                                                          color: MyColor.yourOrder),
-                                                    ) : SizedBox(); 
-                                                  }
-                                                ),
+                                                    shrinkWrap: true,
+                                                    primary: false,
+                                                    padding: EdgeInsets.zero,
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    itemCount: _productOrderList
+                                                        .length,
+                                                    separatorBuilder: (c, i) {
+                                                      return SizedBox(
+                                                          height: 6);
+                                                    },
+                                                    itemBuilder: (context, _i) {
+                                                      ProductOrder
+                                                          productOrder =
+                                                          _productOrderList[_i];
+                                                      if (productOrder
+                                                              .productDeliverys!
+                                                              .length >
+                                                          0) {
+                                                        _status = productOrder
+                                                            .productDeliverys!
+                                                            .first
+                                                            .deliveryStatus!
+                                                            .status!;
+                                                      }
+                                                      return productOrder
+                                                                  .product !=
+                                                              null
+                                                          ? Text(
+                                                              productOrder
+                                                                      .product!
+                                                                      .name! +
+                                                                  " x " +
+                                                                  productOrder
+                                                                      .quantity
+                                                                      .toString(),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .headlineMedium
+                                                                  ?.copyWith(
+                                                                      fontFamily: !UtilsHelper.rightHandLang.contains(
+                                                                              lang)
+                                                                          ? UtilsHelper
+                                                                              .wr_default_font_family
+                                                                          : UtilsHelper
+                                                                              .the_sans_font_family,
+                                                                      fontSize:
+                                                                          13,
+                                                                      color: MyColor
+                                                                          .yourOrder),
+                                                            )
+                                                          : SizedBox();
+                                                    }),
                                               ),
                                               SizedBox(height: 4),
                                               Text(
-                                                UtilsHelper.getString(context, 'delivery_date') +": "+ keysList[index],
+                                                UtilsHelper.getString(context,
+                                                        'delivery_date') +
+                                                    ": " +
+                                                    keysList[index],
                                                 textAlign: TextAlign.start,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -469,9 +630,16 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                                     .textTheme
                                                     .headlineMedium
                                                     ?.copyWith(
-                                                    fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                                    fontSize: 12,
-                                                    color: MyColor.yourOrder),
+                                                        fontFamily: !UtilsHelper
+                                                                .rightHandLang
+                                                                .contains(lang)
+                                                            ? UtilsHelper
+                                                                .wr_default_font_family
+                                                            : UtilsHelper
+                                                                .the_sans_font_family,
+                                                        fontSize: 12,
+                                                        color:
+                                                            MyColor.yourOrder),
                                               ),
                                             ],
                                           ),
@@ -481,7 +649,12 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                             children: [
                                               Text(
 //                                            _status,
-                                                _productOrderList.first.productDeliverys!.first.deliveryStatus!.status!,
+                                                _productOrderList
+                                                    .first
+                                                    .productDeliverys!
+                                                    .first
+                                                    .deliveryStatus!
+                                                    .status!,
                                                 textAlign: TextAlign.start,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -489,9 +662,16 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                                                     .textTheme
                                                     .headlineMedium
                                                     ?.copyWith(
-                                                    fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                                    fontSize: 12,
-                                                    color: MyColor.yourOrder),
+                                                        fontFamily: !UtilsHelper
+                                                                .rightHandLang
+                                                                .contains(lang)
+                                                            ? UtilsHelper
+                                                                .wr_default_font_family
+                                                            : UtilsHelper
+                                                                .the_sans_font_family,
+                                                        fontSize: 12,
+                                                        color:
+                                                            MyColor.yourOrder),
                                               ),
                                             ],
                                           ),
@@ -511,55 +691,69 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                         SizedBox(
                           height: 20,
                         ),
-                        if(con.orderListItem!=null)
-                        getRow(
-                          key: UtilsHelper.getString(context, 'sub_total'),
-                          lang: lang,
-                          value: UtilsHelper.getString(context, displayPriceDouble(con.orderListItem!.subtotal!)),
-                        ),
+                        if (con.orderListItem != null)
+                          getRow(
+                            key: UtilsHelper.getString(context, 'sub_total'),
+                            lang: lang,
+                            value: UtilsHelper.getString(
+                                context,
+                                displayPriceDouble(
+                                    con.orderListItem!.subtotal!)),
+                          ),
                         SizedBox(
                           height: 10,
                         ),
-                        if(con.orderListItem!=null)
-                        getRow(
-                          key: UtilsHelper.getString(context, 'vat'),
-                          lang: lang,
-                          value: UtilsHelper.getString(context, displayPriceDouble(con.orderListItem!.tax!)),
-                        ),
+                        if (con.orderListItem != null)
+                          getRow(
+                            key: UtilsHelper.getString(context, 'vat'),
+                            lang: lang,
+                            value: UtilsHelper.getString(context,
+                                displayPriceDouble(con.orderListItem!.tax!)),
+                          ),
                         SizedBox(
                           height: 10,
                         ),
-                        if(con.orderListItem!=null)
-                        getRow(
-                          key: UtilsHelper.getString(context, 'delivery'),
-                          lang: lang,
-                          value: UtilsHelper.getString(context, displayPriceDouble(con.orderListItem!.deliveryFee!)),
-                        ),
+                        if (con.orderListItem != null)
+                          getRow(
+                            key: UtilsHelper.getString(context, 'delivery'),
+                            lang: lang,
+                            value: UtilsHelper.getString(
+                                context,
+                                displayPriceDouble(
+                                    con.orderListItem!.deliveryFee!)),
+                          ),
                         SizedBox(
                           height: 10,
                         ),
-                        if(con.orderListItem!=null)
-                        getRow(
-                          key: UtilsHelper.getString(context, 'coupon_discount'),
-                          lang: lang,
-                          suffixWidget: GestureDetector(
-                            onTap: () async {
-
-                            },
-                            child: Text(
-                              displayPriceDouble(con.orderListItem?.promotionalDisount??0.0),
+                        if (con.orderListItem != null)
+                          getRow(
+                            key: UtilsHelper.getString(
+                                context, 'coupon_discount'),
+                            lang: lang,
+                            suffixWidget: GestureDetector(
+                              onTap: () async {},
+                              child: Text(
+                                displayPriceDouble(
+                                    con.orderListItem?.promotionalDisount ??
+                                        0.0),
 //                          UtilsHelper.getString(context, 'apply_coupon')
 //                              .toUpperCase(),
-                              textDirection: TextDirection.ltr,
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: MyColor.textPrimaryColor,
+                                textDirection: TextDirection.ltr,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.copyWith(
+                                      fontFamily: !UtilsHelper.rightHandLang
+                                              .contains(lang)
+                                          ? UtilsHelper.wr_default_font_family
+                                          : UtilsHelper.the_sans_font_family,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: MyColor.textPrimaryColor,
+                                    ),
                               ),
                             ),
                           ),
-                        ),
                         SizedBox(
                           height: 30,
                         ),
@@ -570,87 +764,108 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                         SizedBox(
                           height: 30,
                         ),
-                        if(con.orderListItem!=null)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              UtilsHelper.getString(context, 'total_order'),
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: MyColor.textPrimaryColor,
+                        if (con.orderListItem != null)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                UtilsHelper.getString(context, 'total_order'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.copyWith(
+                                      fontFamily: !UtilsHelper.rightHandLang
+                                              .contains(lang)
+                                          ? UtilsHelper.wr_default_font_family
+                                          : UtilsHelper.the_sans_font_family,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: MyColor.textPrimaryColor,
+                                    ),
                               ),
-                            ),
-                            Text(
-                              UtilsHelper.getString(context, displayPriceDouble(con.orderListItem!.finalAmount!)),
-                              textDirection: TextDirection.ltr,
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: MyColor.textPrimaryColor,
+                              Text(
+                                UtilsHelper.getString(
+                                    context,
+                                    displayPriceDouble(
+                                        con.orderListItem!.finalAmount!)),
+                                textDirection: TextDirection.ltr,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.copyWith(
+                                      fontFamily: !UtilsHelper.rightHandLang
+                                              .contains(lang)
+                                          ? UtilsHelper.wr_default_font_family
+                                          : UtilsHelper.the_sans_font_family,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: MyColor.textPrimaryColor,
+                                    ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                         SizedBox(
                           height: 40,
                         ),
                       ],
                     ),
                   ),
-                  if(isAnyDeliveryRemaining)
-                  Container(
-                    height: 56,
-                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if((con.orderListItem?.cancelRequest??null) == null) {
-                        selectCancelButton(context, 
-                        onPress: (){
-                          if((con.orderListItem?.cancelRequest??null) == null) {
-                          con.orderCancelRequestApi(con.orderListItem!.id!);
+                  if (isAnyDeliveryRemaining)
+                    Container(
+                      height: 56,
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if ((con.orderListItem?.cancelRequest ?? null) ==
+                              null) {
+                            selectCancelButton(context, onPress: () {
+                              if ((con.orderListItem?.cancelRequest ?? null) ==
+                                  null) {
+                                con.orderCancelRequestApi(
+                                    con.orderListItem!.id!);
+                              }
+                            },
+                                title: getStatusTitle(con.orderListItem),
+                                // subtitle: UtilsHelper.getString(context,'are_you_sure'),
+                                textStyle:
+                                    Theme.of(context).textTheme.labelSmall,
+                                color: Colors.black);
                           }
-                        }, 
-                        title: getStatusTitle(con.orderListItem),
-                        subtitle: UtilsHelper.getString(context,'are_you_sure'),
-                         textStyle: Theme.of(context).textTheme.labelSmall,
-                          color: Colors.black);
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        textDirection: TextDirection.ltr,
-                        children: [
-                          Text(
-                            getStatusTitle(con.orderListItem),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: UtilsHelper.the_sans_font_family,
-                              color: MyColor.textPrimaryLightColor,
-                            ),
-                          )
-                        ],
-                      ),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          textDirection: TextDirection.ltr,
+                          children: [
+                            Text(
+                              getStatusTitle(con.orderListItem),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily:
+                                        UtilsHelper.the_sans_font_family,
+                                    color: MyColor.textPrimaryLightColor,
+                                  ),
+                            )
+                          ],
                         ),
-                        backgroundColor:
-                        MaterialStateColor.resolveWith((states) => getButtonColor(con.orderListItem)),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => getButtonColor(con.orderListItem)),
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 ],
               ),
             ),
@@ -686,7 +901,9 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                   Text(
                     orderDetails[index]['title'],
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
+                          fontFamily: !UtilsHelper.rightHandLang.contains(lang)
+                              ? UtilsHelper.wr_default_font_family
+                              : UtilsHelper.the_sans_font_family,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: MyColor.textPrimaryDarkColor,
@@ -699,7 +916,9 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
                     orderDetails[index]['description'],
                     textDirection: TextDirection.ltr,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
+                        fontFamily: !UtilsHelper.rightHandLang.contains(lang)
+                            ? UtilsHelper.wr_default_font_family
+                            : UtilsHelper.the_sans_font_family,
                         fontSize: 12,
                         color: MyColor.yourOrder,
                         fontWeight: FontWeight.normal),
@@ -863,45 +1082,51 @@ class _TrackOrderState extends StateMVC<TrackOrder> {
         Text(
           key ?? '',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
+              fontFamily: !UtilsHelper.rightHandLang.contains(lang)
+                  ? UtilsHelper.wr_default_font_family
+                  : UtilsHelper.the_sans_font_family,
               fontSize: 16,
               color: MyColor.textPrimaryDarkColor),
         ),
         suffixWidget != null
             ? suffixWidget
             : Text(
-          value ?? '',
-          textDirection: TextDirection.ltr,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontFamily: !UtilsHelper.rightHandLang.contains(lang) ? UtilsHelper.wr_default_font_family : UtilsHelper.the_sans_font_family,
-              fontSize: 16,
-              color: MyColor.textPrimaryDarkColor),
-        ),
+                value ?? '',
+                textDirection: TextDirection.ltr,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontFamily: !UtilsHelper.rightHandLang.contains(lang)
+                        ? UtilsHelper.wr_default_font_family
+                        : UtilsHelper.the_sans_font_family,
+                    fontSize: 16,
+                    color: MyColor.textPrimaryDarkColor),
+              ),
       ],
     );
   }
 
   String getDelivery(String string) {
-    return " ("+string+")";
+    return " (" + string + ")";
   }
 }
 
 getButtonColor(OrderListItem? orderListItem) {
-  if((orderListItem?.cancelRequest??null)==null){
+  if ((orderListItem?.cancelRequest ?? null) == null) {
     return MyColor.commonColorSet2;
   }
-  if(orderListItem!.cancelRequest!.status==0) {
+  if (orderListItem!.cancelRequest!.status == 0) {
     return Colors.grey;
-  } else if(orderListItem.cancelRequest!.status==2) {
+  } else if (orderListItem.cancelRequest!.status == 2) {
     return Colors.red;
-  } else if(orderListItem.cancelRequest!.status==1 && orderListItem.cancelRequest!.refundStatus==1) {
-    if (orderListItem.paymentMethod=="cash") {
+  } else if (orderListItem.cancelRequest!.status == 1 &&
+      orderListItem.cancelRequest!.refundStatus == 1) {
+    if (orderListItem.paymentMethod == "cash") {
       return Colors.green;
     } else {
       return Colors.green;
     }
-  } else if(orderListItem.cancelRequest!.status==1 && orderListItem.cancelRequest!.refundStatus==0) {
-    if (orderListItem.paymentMethod=="cash") {
+  } else if (orderListItem.cancelRequest!.status == 1 &&
+      orderListItem.cancelRequest!.refundStatus == 0) {
+    if (orderListItem.paymentMethod == "cash") {
       return Colors.blue;
     } else {
       return Colors.green;
@@ -912,21 +1137,24 @@ getButtonColor(OrderListItem? orderListItem) {
 }
 
 String getStatusTitle(OrderListItem? orderListItem) {
-  if((orderListItem?.cancelRequest??null)==null){
+  if ((orderListItem?.cancelRequest ?? null) == null) {
     return UtilsHelper.getString(null, "cancel_request");
   }
-  if(orderListItem!.cancelRequest!.status==0) {
+  if (orderListItem!.cancelRequest!.status == 0) {
     return UtilsHelper.getString(null, "cancel_request_already_submitted");
-  } else if(orderListItem.cancelRequest!.status==2) {
+  } else if (orderListItem.cancelRequest!.status == 2) {
     return UtilsHelper.getString(null, "cancel_request_declined_by_admin");
-  } else if(orderListItem.cancelRequest!.status==1 && orderListItem.cancelRequest!.refundStatus==1) {
-    if (orderListItem.paymentMethod=="cash") {
-      return UtilsHelper.getString(null, "cancel_request_approved_and_refunded");
+  } else if (orderListItem.cancelRequest!.status == 1 &&
+      orderListItem.cancelRequest!.refundStatus == 1) {
+    if (orderListItem.paymentMethod == "cash") {
+      return UtilsHelper.getString(
+          null, "cancel_request_approved_and_refunded");
     } else {
       return UtilsHelper.getString(null, "cancel_request_approved");
     }
-  } else if(orderListItem.cancelRequest!.status==1 && orderListItem.cancelRequest!.refundStatus==0) {
-    if (orderListItem.paymentMethod=="cash") {
+  } else if (orderListItem.cancelRequest!.status == 1 &&
+      orderListItem.cancelRequest!.refundStatus == 0) {
+    if (orderListItem.paymentMethod == "cash") {
       return UtilsHelper.getString(null, "cancel_request_approved");
     } else {
       return UtilsHelper.getString(null, "cancel_request_approved");
@@ -968,9 +1196,7 @@ class MySeparator extends StatelessWidget {
   }
 }
 
-
-
- Future<dynamic>  selectCancelButton(context,
+Future<dynamic> selectCancelButton(context,
     {String? prefixPath,
     required VoidCallback onPress,
     required String? title,
@@ -984,21 +1210,21 @@ class MySeparator extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return ClipRRect(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 26,vertical: 24),
-            padding: EdgeInsets.symmetric(
-              vertical: 30,
-              horizontal: 24,
-            ),
-           decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(20),
-             color: Theme.of(context).brightness == Brightness.light
+            child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 26, vertical: 24),
+          padding: EdgeInsets.symmetric(
+            vertical: 30,
+            horizontal: 24,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).brightness == Brightness.light
                 ? Colors.white
                 : MyColor.mainColor,
-           ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
                 Text(
                   title ?? '',
                   maxLines: 1,
@@ -1015,44 +1241,57 @@ class MySeparator extends StatelessWidget {
                 SizedBox(height: 24),
                 Row(
                   children: [
-                    Expanded(child: ElevatedButton(onPressed: () {
-                      Navigator.pop(context);
-                    }, 
-                     style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 14)),
-                        backgroundColor:
-                        MaterialStateColor.resolveWith((states) => MyColor.commonColorSet1 as Color),
-                      ),
-                    child: Text(UtilsHelper.getString(context, 'no'),
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white)))),
+                    Expanded(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.symmetric(vertical: 14)),
+                              backgroundColor: MaterialStateColor.resolveWith(
+                                  (states) => MyColor.commonColorSet1 as Color),
+                            ),
+                            child: Text(UtilsHelper.getString(context, 'no'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(color: Colors.white)))),
                     SizedBox(width: 12),
-                     Expanded(child: ElevatedButton(onPressed:(){ 
-                      onPress.call();
-                      Navigator.pop(context);
-                     }, 
-                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 14)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        
-                        ),
-                        backgroundColor:
-                        MaterialStateColor.resolveWith((states) => MyColor.commonColorSet2 as Color),
-                      ),
-                    child: Text(UtilsHelper.getString(context, 'yes' ),
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white)))),
+                    Expanded(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              onPress.call();
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.symmetric(vertical: 14)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateColor.resolveWith(
+                                  (states) => MyColor.commonColorSet2 as Color),
+                            ),
+                            child: Text(UtilsHelper.getString(context, 'yes'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(color: Colors.white)))),
                   ],
                 )
-            ],
+              ],
+            ),
           ),
-        ),
-    ));
-  });
+        ));
+      });
 }

@@ -17,6 +17,7 @@ class HomeController extends ControllerMVC {
       products = value.products;
       setState(() {});
     }).catchError((e) {
+      print("This is error $e");
       commonAlertNotification("Error",
           message: UtilsHelper.getString(null, "something_went_wrong"));
     }).whenComplete(() {});

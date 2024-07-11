@@ -39,98 +39,117 @@ class _YourOrdersState extends StateMVC<YourOrders> {
 //      {"title": UtilsHelper.getString(context, "order_text") + "#5679"},
 //      {"title": UtilsHelper.getString(context, "order_text") + "#5680"},
 //    ];
-    return con.orderListItems != null && ((con.orderListItems?.length??0) == 0) ? EmptyOrderScreen(onTap: () {
-      Navigator.of(context).pushReplacementNamed(RoutePath.home_screen);
-    }) : Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
-            child: headerWidget(
-              title: UtilsHelper.getString(context, 'your_orders'),
-              onPress: () {
-                Navigator.of(context).pop();
-              },
-              context: context,
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 27,
+    return con.orderListItems != null &&
+            ((con.orderListItems?.length ?? 0) == 0)
+        ? EmptyOrderScreen(onTap: () {
+            Navigator.of(context).pushReplacementNamed(RoutePath.home_screen);
+          })
+        : Scaffold(
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: headerWidget(
+                    title: UtilsHelper.getString(context, 'your_orders'),
+                    onPress: () {
+                      Navigator.of(context).pop();
+                    },
+                    context: context,
+                  ),
                 ),
-                child: Column(
-                  children: [
-                   SizedBox(
-                     height: 20,
-                   ),
-                    con.orderListItems == null
-                        ? AddressListShimmer()
-                        : (con.orderListItems!.length == 0
-                            ? Center(
-                                child: Text(
-                                  UtilsHelper.getString(
-                                      context, 'data_not_available'),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                        fontFamily:
-                                            lang == 'en' ? 'Helvetica' : 'TheSans',
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 27,
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          con.orderListItems == null
+                              ? AddressListShimmer()
+                              : (con.orderListItems!.length == 0
+                                  ? Center(
+                                      child: Text(
+                                        UtilsHelper.getString(
+                                            context, 'data_not_available'),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontFamily: lang == 'en'
+                                                  ? 'Helvetica'
+                                                  : 'TheSans',
+                                            ),
                                       ),
-                                ),
-                              )
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                padding: EdgeInsets.zero,
-                                itemCount: con.orderListItems!.length,
-                                itemBuilder: (context, index) {
-                                  OrderListItem orderListItem =
-                                      con.orderListItems![index];
-                                  return Column(
-                                    children: [
-                                      orderRow(
-                                        title: UtilsHelper.getString(
-                                                context, "order_text") +
-                                            " " +
-                                            orderListItem.id.toString(),
-                                        suffixWidget: Icon(
-                                          !UtilsHelper.rightHandLang.contains(lang) ? Icons.keyboard_arrow_right : Icons.keyboard_arrow_left,
-                                          color: MyColor.yourOrder,
-                                        ),
-                                        onPress: () {
-                                          print('clicked on order');
-                                          Navigator.of(context).pushNamed(
-                                              RoutePath.track_order,
-                                              arguments: orderListItem.id);
-                                        },
-                                        lang: lang,
-                                      ),
-                                      SizedBox(
-                                        height: 17,
-                                      )
-                                    ],
-                                  );
-                                },
-                              )),
-                  ],
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      padding: EdgeInsets.zero,
+                                      itemCount: con.orderListItems!.length,
+                                      itemBuilder: (context, index) {
+                                        OrderListItem orderListItem =
+                                            con.orderListItems![index];
+                                        return Column(
+                                          children: [
+                                            orderRow(
+                                              orderListItem: orderListItem,
+                                              orderNumber:
+                                                  UtilsHelper.getString(context,
+                                                          "order_text") +
+                                                      " " +
+                                                      orderListItem.id
+                                                          .toString(),
+                                              suffixWidget: Icon(
+                                                !UtilsHelper.rightHandLang
+                                                        .contains(lang)
+                                                    ? Icons.keyboard_arrow_right
+                                                    : Icons.keyboard_arrow_left,
+                                                color: MyColor.yourOrder,
+                                              ),
+                                              onPress: () {
+                                                print('clicked on order');
+                                                Navigator.of(context).pushNamed(
+                                                    RoutePath.track_order,
+                                                    arguments:
+                                                        orderListItem.id);
+                                              },
+                                              lang: lang,
+                                            ),
+                                            SizedBox(
+                                              height: 17,
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    )),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget orderRow(
-      {String? title, Widget? suffixWidget, onPress, required lang}) {
+      {String? orderTitle,
+      String? orderNumber,
+      String? orderTotal,
+      String? orderDate,
+      String? orderImage,
+      Widget? suffixWidget,
+      onPress,
+      required lang,
+      required OrderListItem orderListItem}) {
     return GestureDetector(
       onTap: onPress,
       child: ClipRRect(
@@ -147,18 +166,34 @@ class _YourOrdersState extends StateMVC<YourOrders> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                     children: [
-                      Text(
-                        title ?? "",
-                        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                              fontFamily:
-                                  lang == 'en' ? 'Helvetica' : 'TheSans',
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                              color: MyColor.textPrimaryDarkColor,
-                            ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          child: Image.network(orderListItem.productOrders[0].product!.image!.toString()),
+                        ),
                       ),
+                      Column(
+                        children: [
+                          Text(
+                            orderTitle ?? "",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall
+                                ?.copyWith(
+                                  fontFamily:
+                                      lang == 'en' ? 'Helvetica' : 'TheSans',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                  color: MyColor.textPrimaryDarkColor,
+                                ),
+                          ),
+                        ],
+                      ),
+
                       // Icon(Icons.keyboard_arrow_down),
                       if (suffixWidget != null) suffixWidget,
                     ],

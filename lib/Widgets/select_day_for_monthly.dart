@@ -35,7 +35,7 @@ class _SelectDaysForMonthlyState extends State<SelectDaysForMonthly> {
             child: Text(
               UtilsHelper.getString(
                   context, "select_date_for_monthly_delivery"),
-              style: Theme.of(context).textTheme.headline5!.copyWith(
+              style: Theme.of(context).textTheme.displayMedium!.copyWith(
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
                   ),

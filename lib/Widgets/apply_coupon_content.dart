@@ -72,7 +72,9 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                                       lang == 'en' ? 'Helvetica' : 'TheSans',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
-                                  color:dark(context) ? Colors.white : MyColor.commonColorSet1,
+                                  color: dark(context)
+                                      ? Colors.white
+                                      : MyColor.commonColorSet1,
                                 ),
                       ),
                     )
@@ -84,7 +86,8 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                       context,
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       controller: _couponCode,
-                      placeholder: UtilsHelper.getString(context, "enter_coupon_code"),
+                      placeholder:
+                          UtilsHelper.getString(context, "enter_coupon_code"),
                       lang: lang,
                     ),
                     Positioned(
@@ -129,7 +132,9 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                                       lang == 'en' ? 'Helvetica' : 'TheSans',
                                   fontWeight: FontWeight.w900,
                                   fontSize: 12,
-                                  color:dark(context) ? MyColor.white : MyColor.commonColorSet1,
+                                  color: dark(context)
+                                      ? MyColor.white
+                                      : MyColor.commonColorSet1,
                                 ),
                               ),
                       ),
@@ -141,8 +146,11 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                     scrollDirection: Axis.vertical,
                     child: Container(
                       width: size.width,
-                      padding:EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                      color : dark(context) ? Colors.transparent : MyColor.lightBackground,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      color: dark(context)
+                          ? Colors.transparent
+                          : MyColor.lightBackground,
                       child: con.offerList == null
                           ? OfferAlertListShimmer()
                           : Column(
@@ -159,7 +167,8 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                                     sar: '\n' +
                                         UtilsHelper.getString(context, "save") +
                                         " " +
-                                        offerItem.getSaveString(stringAsFixed: 0),
+                                        offerItem.getSaveString(
+                                            stringAsFixed: 0),
                                     lang: lang,
                                     description: UtilsHelper.getString(
                                             context, "expire_on") +
@@ -227,7 +236,7 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
             Container(
               width: 75,
               height: 45,
-              color: MyColor.darkYellow,
+              color: MyColor.commonColorSet2,
               child: Center(
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -239,7 +248,9 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                               fontFamily:
                                   lang == 'en' ? 'Helvetica' : 'TheSans',
                               fontSize: 10,
-                              color: dark(context) ? Colors.white : MyColor.textPrimaryLightColor,
+                              color: dark(context)
+                                  ? Colors.white
+                                  : MyColor.textPrimaryLightColor,
                               height: 1.8,
                             ),
                       ),
@@ -250,7 +261,9 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                                   lang == 'en' ? 'Helvetica' : 'TheSans',
                               fontSize: 9,
                               fontWeight: FontWeight.w600,
-                              color:dark(context) ? Colors.white : MyColor.textPrimaryLightColor,
+                              color: dark(context)
+                                  ? Colors.white
+                                  : MyColor.textPrimaryLightColor,
                             ),
                       ),
                     ],
@@ -266,7 +279,8 @@ class _ApplyCouponContentState extends StateMVC<ApplyCouponContent> {
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontFamily: lang == 'en' ? 'Helvetica' : 'TheSans',
                     fontSize: 9,
-                    color:dark(context) ? Colors.white :  MyColor.baseDarkColor),
+                    color:
+                        dark(context) ? Colors.white : MyColor.baseDarkColor),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),

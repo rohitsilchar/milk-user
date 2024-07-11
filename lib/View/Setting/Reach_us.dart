@@ -138,7 +138,7 @@ class _ReachUsState extends State<ReachUs> {
                   ),
                   Text(
                     "Reach Us\n+91 96193 47250",
-                    style: Theme.of(context).textTheme.headline3?.copyWith(
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontSize: 16,
                           color: MyColor.aboutUsDescription,
                         ),
@@ -160,7 +160,7 @@ class _ReachUsState extends State<ReachUs> {
                   ),
                   Text(
                     "help@mamasmilkfarm.com",
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontSize: 16,
                           color: MyColor.aboutUsDescription,
                         ),
@@ -182,7 +182,7 @@ class _ReachUsState extends State<ReachUs> {
                   ),
                   Text(
                     "Mon - Sun 09:00 - 18:00\n(except public holidays)",
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontSize: 16,
                           color: MyColor.aboutUsDescription,
                         ),
@@ -204,7 +204,7 @@ class _ReachUsState extends State<ReachUs> {
                   ),
                   Text(
                     "Mama's Milk Farm,\nPlot no. 64/4 & 61/3 Usroli \nBhiwandi,\nNear Shangrila Resort,\nThane, Maharashtra, 421302",
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontSize: 16,
                           color: MyColor.aboutUsDescription,
                         ),

@@ -43,25 +43,24 @@ Future<CommonResponse> verifyOTP(
   print("phone $phone");
   try {
     d.Response response;
-    response = await dio.post(
-      Urls.userVerifyOtp,
-      options: d.Options(headers: 
-      {"Content-Type": "application/json"},
-      validateStatus: (status) => true),
-      data: jsonEncode({
-       // Params.deviceToken: token,
-        Params.deviceType: Platform.isAndroid ? "android" : "ios",
-        Params.otp: isfirebase == false ? otp : "1234",
-        Params.phone: phone,
-        "player_id" : OneSignal.User.pushSubscription.id
-      })
-    );
+    response = await dio.post(Urls.userVerifyOtp,
+        options: d.Options(
+            headers: {"Content-Type": "application/json"},
+            validateStatus: (status) => true),
+        data: jsonEncode({
+          // Params.deviceToken: token,
+          Params.deviceType: Platform.isAndroid ? "android" : "ios",
+          Params.otp: isfirebase == false ? otp : "1234",
+          Params.phone: phone,
+          "player_id": OneSignal.User.pushSubscription.id
+        }));
+    print("*****************************");
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       CommonResponse commonResponse = CommonResponse.fromJson(response.data);
       return commonResponse;
     } else {
-     
       throw new Exception(response.data);
     }
   } on d.DioException catch (e) {
@@ -78,11 +77,8 @@ Future<CommonResponse> userResendOtp(String phone) async {
       Urls.userResendOtp,
       data: {Params.phone: phone},
       options: d.Options(
-        headers: {
-          "Content-Type":  "application/json"
-        },
-        validateStatus: (status) => true
-      ),
+          headers: {"Content-Type": "application/json"},
+          validateStatus: (status) => true),
     );
     print("reSendOtp  $response");
     if (response.statusCode == 200) {
@@ -157,7 +153,7 @@ Future<CommonResponse> userUpdateProfile(Map<String, dynamic> bodyData) async {
   Map<String, dynamic> headerData = {
     Params.apiToken: appState.userModel.apiToken,
     Params.contentType: "application/json",
- //   Params.langCode: appState.languageItem.languageCode
+    //   Params.langCode: appState.languageItem.languageCode
   };
 
   try {
@@ -173,7 +169,7 @@ Future<CommonResponse> userUpdateProfile(Map<String, dynamic> bodyData) async {
     } else {
       throw new Exception(response.data);
     }
-  // ignore: deprecated_member_use
+    // ignore: deprecated_member_use
   } on d.DioError catch (e) {
     if (e.response!.statusCode == 401) {
       throw "number_you_entered_is_already_registered";

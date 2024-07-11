@@ -107,38 +107,39 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
     final size = MediaQuery.of(context).size;
 
     List _availablePaymentMethods = [
-      if(setting.value.setting!['enable_cod'] == '1')
-      {
-        "id" : 23,
-        "title": UtilsHelper.getString(context, 'cash_on_delivery'), "desc": ""
+      if (setting.value.setting!['enable_cod'] == '1')
+        {
+          "id": 23,
+          "title": UtilsHelper.getString(context, 'cash_on_delivery'),
+          "desc": ""
         },
-      if(setting.value.setting!['enable_wallet'] == '1')
-      {
-        "id" : 24,
-        "title": UtilsHelper.getString(context, 'wallet'),
-        "desc": UtilsHelper.getString(context, "balance")
-      },
-       if(setting.value.setting!['enable_razorpay'] == '1')
-      {
-        "id": 0,
-        "title": UtilsHelper.getString(context, 'Razorpay'),
-        "desc": ""
-      },
+      if (setting.value.setting!['enable_wallet'] == '1')
+        {
+          "id": 24,
+          "title": UtilsHelper.getString(context, 'wallet'),
+          "desc": UtilsHelper.getString(context, "balance")
+        },
+      if (setting.value.setting!['enable_razorpay'] == '1')
+        {
+          "id": 0,
+          "title": UtilsHelper.getString(context, 'Razorpay'),
+          "desc": ""
+        },
       // {"title": UtilsHelper.getString(context, 'Stripe'), "desc": ""},
-       if(isPaypal == '1') {
-        "id": 1,
-        "title": UtilsHelper.getString(context, 'paypal'),
-         "desc": ""
-        } ,
-        if(setting.value.setting!['enable_stripe'] == '1')
+      if (isPaypal == '1')
+        {
+          "id": 1,
+          "title": UtilsHelper.getString(context, 'paypal'),
+          "desc": ""
+        },
+      if (setting.value.setting!['enable_stripe'] == '1')
         {
           "id": 2,
-          "title" : UtilsHelper.getString(context, 'stripe'),
+          "title": UtilsHelper.getString(context, 'stripe'),
         },
       // {"title": UtilsHelper.getString(context, 'paylabs'), "desc": ""},
       // {"title": UtilsHelper.getString(context, 'credit_card'), "desc": ""},
     ];
-    
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -157,7 +158,7 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 27),
+                padding: const EdgeInsets.symmetric(horizontal: 27),
                 child: Column(
                   children: [
                     SizedBox(
@@ -190,22 +191,29 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
                           TimeOfDay fromTime = TimeOfDay(
                               hour: int.parse(fromTimeStr[0]),
                               minute: int.parse(fromTimeStr[1]));
-                
+
                           List<String> toTimeStr = timeSlot.toTime!.split(":");
                           TimeOfDay toTime = TimeOfDay(
                               hour: int.parse(toTimeStr[0]),
                               minute: int.parse(toTimeStr[1]));
-                
+
                           return Column(
                             children: [
-                              CheckoutTile( isCreditCard: isCreditCard, title: UtilsHelper.getString(
-                                    context, timeSlot.name!), desc: fromTime.format(context) +
-                                    " - " +
-                                    toTime.format(context), isActive: _selectedTimeSlot == index ? true : false, onPress: () {
-                                  setState(() {
-                                    _selectedTimeSlot = index;
-                                  });
-                                }, lang: lang),
+                              CheckoutTile(
+                                  isCreditCard: isCreditCard,
+                                  title: UtilsHelper.getString(
+                                      context, timeSlot.name!),
+                                  desc: fromTime.format(context) +
+                                      " - " +
+                                      toTime.format(context),
+                                  isActive:
+                                      _selectedTimeSlot == index ? true : false,
+                                  onPress: () {
+                                    setState(() {
+                                      _selectedTimeSlot = index;
+                                    });
+                                  },
+                                  lang: lang),
                               SizedBox(
                                 height: 10,
                               ),
@@ -237,140 +245,198 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
                         padding: EdgeInsets.zero,
                         itemCount: _availablePaymentMethods.length,
                         itemBuilder: (context, index) {
-                          
-                          return   _availablePaymentMethods[index]['title'] == null ?
-                           null
-                          : Column(
-                            children: [
-                              (_availablePaymentMethods[index]['title'] ==
-                                      UtilsHelper.getString(context, 'wallet'))
-                                  ? ValueListenableBuilder<double>(
-                                      valueListenable: appState.myWalletBalance,
-                                      builder:
-                                          (context, _myWalletBalance, child) {
-                                        return Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            CheckoutTile(isCreditCard: isCreditCard, title: _availablePaymentMethods[
-                                                  index]['title'], desc: UtilsHelper.getString(context, 'balance') +
-                                                  " | " +
-                                                  displayPriceDouble(
-                                                      _myWalletBalance), isActive: _selectedPaymentMethod ==
-                                                          _availablePaymentMethods[index]['id']
-                                                      ? true
-                                                      : false, onPress: () {
-                                                setState(() {
-                                                  _selectedPaymentMethod = _availablePaymentMethods[index]['id'];
-                                               
-                                                  // payMethod =_availablePaymentMethods[index]['title'];
-                                                });
-                                              }, lang: lang),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              height: 60,
-                                              width: size.width,
-                                              decoration: BoxDecoration(
-                                                color: MyColor.mainColor,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(8),
-                                                ),
-                                              ),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 15),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(8),
-                                                ),
-                                                child: GestureDetector(
-                                                  onTap: () async {
-                                                    print(
-                                                        "add balance pressed");
-                                                    await Navigator.of(context).pushNamed(RoutePath.add_wallet_amount,arguments: appState.finalTotal);
-                                                    con.getMyWalletAmountApi(context);
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        lang == 'en'
-                                                            ? MainAxisAlignment
-                                                                .spaceBetween
-                                                            : MainAxisAlignment
-                                                                .start,
-                                                    children: [
-                                                      Container(
-                                                        height: 31,
-                                                        width: 31,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: MyColor
-                                                              .commonColorSet2,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(22),
-                                                          ),
-                                                        ),
-                                                        child: Center(
-                                                          child: Icon(
-                                                            Icons.add,
-                                                            color: Colors.white,
-                                                            size: 16,
-                                                          ),
+                          return _availablePaymentMethods[index]['title'] ==
+                                  null
+                              ? null
+                              : Column(
+                                  children: [
+                                    (_availablePaymentMethods[index]['title'] ==
+                                            UtilsHelper.getString(
+                                                context, 'wallet'))
+                                        ? ValueListenableBuilder<double>(
+                                            valueListenable:
+                                                appState.myWalletBalance,
+                                            builder: (context, _myWalletBalance,
+                                                child) {
+                                              return Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  CheckoutTile(
+                                                      isCreditCard:
+                                                          isCreditCard,
+                                                      title:
+                                                          _availablePaymentMethods[
+                                                              index]['title'],
+                                                      desc: UtilsHelper
+                                                              .getString(
+                                                                  context,
+                                                                  'balance') +
+                                                          " | " +
+                                                          displayPriceDouble(
+                                                              _myWalletBalance),
+                                                      isActive:
+                                                          _selectedPaymentMethod ==
+                                                                  _availablePaymentMethods[
+                                                                          index]
+                                                                      ['id']
+                                                              ? true
+                                                              : false,
+                                                      onPress: () {
+                                                        setState(() {
+                                                          _selectedPaymentMethod =
+                                                              _availablePaymentMethods[
+                                                                  index]['id'];
+
+                                                          // payMethod =_availablePaymentMethods[index]['title'];
+                                                        });
+                                                      },
+                                                      lang: lang),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    height: 60,
+                                                    width: size.width,
+                                                    decoration: BoxDecoration(
+                                                      color: MyColor.mainColor,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(8),
+                                                      ),
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 15),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(8),
+                                                      ),
+                                                      child: GestureDetector(
+                                                        onTap: () async {
+                                                          print(
+                                                              "add balance pressed");
+                                                          await Navigator.of(
+                                                                  context)
+                                                              .pushNamed(
+                                                                  RoutePath
+                                                                      .add_wallet_amount,
+                                                                  arguments:
+                                                                      appState
+                                                                          .finalTotal);
+                                                          con.getMyWalletAmountApi(
+                                                              context);
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment: lang ==
+                                                                  'en'
+                                                              ? MainAxisAlignment
+                                                                  .spaceBetween
+                                                              : MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                              height: 31,
+                                                              width: 31,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: MyColor
+                                                                    .commonColorSet2,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          22),
+                                                                ),
+                                                              ),
+                                                              child: Center(
+                                                                child: Icon(
+                                                                  Icons.add,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  size: 16,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: lang == 'en'
+                                                                  ? EdgeInsets
+                                                                      .zero
+                                                                  : EdgeInsets
+                                                                      .only(
+                                                                          right:
+                                                                              13),
+                                                              child: Text(
+                                                                UtilsHelper
+                                                                    .getString(
+                                                                        context,
+                                                                        'add_balance'),
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .displaySmall
+                                                                    ?.copyWith(
+                                                                      fontFamily: lang ==
+                                                                              'en'
+                                                                          ? 'Helvetica'
+                                                                          : 'TheSans',
+                                                                      fontSize:
+                                                                          15,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: dark(
+                                                                              context)
+                                                                          ? Colors
+                                                                              .white
+                                                                          : MyColor
+                                                                              .textPrimaryColor,
+                                                                    ),
+                                                              ),
+                                                            )
+                                                          ],
                                                         ),
                                                       ),
-                                                      Padding(
-                                                        padding: lang == 'en'
-                                                            ? EdgeInsets.zero
-                                                            : EdgeInsets.only(
-                                                                right: 13),
-                                                        child: Text(
-                                                          UtilsHelper.getString(
-                                                              context,
-                                                              'add_balance'),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .displaySmall
-                                                                  ?.copyWith(
-                                                                    fontFamily: lang ==
-                                                                            'en'
-                                                                        ? 'Helvetica'
-                                                                        : 'TheSans',
-                                                                    fontSize:15,
-                                                                    fontWeight:FontWeight.bold,
-                                                                    color:dark(context) ?Colors.white : MyColor.textPrimaryColor,
-                                                                  ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        );
-                                      })
-                                  : CheckoutTile( isCreditCard: isCreditCard, title: _availablePaymentMethods[index]
-                                          ['title'], desc: _availablePaymentMethods[index]
-                                          ['desc'], isActive: _selectedPaymentMethod == _availablePaymentMethods[index]['id']
-                                          ? true
-                                          : false, onPress: () {
-                                        setState(() {
-                                          // _selectedPaymentMethod = index;
-                                          _selectedPaymentMethod = _availablePaymentMethods[index]['id'];
-                                          if (_availablePaymentMethods[index]
-                                                  ['title'] ==
-                                              UtilsHelper.getString(
-                                                  context, 'credit_card')) {
-                                            isCreditCard = !isCreditCard;
-                                          }
-                                        });
-                                      }, lang: lang),
-                              // SizedBox(
-                              //   height: 10,
-                              // ),
-                            ],
-                          );
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            })
+                                        : CheckoutTile(
+                                            isCreditCard: isCreditCard,
+                                            title:
+                                                _availablePaymentMethods[index]
+                                                    ['title'],
+                                            desc:
+                                                _availablePaymentMethods[index]
+                                                    ['desc'],
+                                            isActive: _selectedPaymentMethod ==
+                                                    _availablePaymentMethods[
+                                                        index]['id']
+                                                ? true
+                                                : false,
+                                            onPress: () {
+                                              setState(() {
+                                                // _selectedPaymentMethod = index;
+                                                _selectedPaymentMethod =
+                                                    _availablePaymentMethods[
+                                                        index]['id'];
+                                                if (_availablePaymentMethods[
+                                                        index]['title'] ==
+                                                    UtilsHelper.getString(
+                                                        context,
+                                                        'credit_card')) {
+                                                  isCreditCard = !isCreditCard;
+                                                }
+                                              });
+                                            },
+                                            lang: lang),
+                                    // SizedBox(
+                                    //   height: 10,
+                                    // ),
+                                  ],
+                                );
                         },
                       ),
                     SizedBox(
@@ -390,12 +456,15 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
                       width: double.infinity,
                       child: commonButton(
                         onPress: () async {
-                         
-                           String payMethod = getPaymentMethodName(_selectedPaymentMethod);
+                          String payMethod =
+                              getPaymentMethodName(_selectedPaymentMethod);
 
-                          if ( payMethod == 'wallet' &&
-                              appState.finalTotal >= appState.myWalletBalance.value) {
-                            commonAlertNotification("Error",message: UtilsHelper.getString(context,"add_amount_in_wallet_instruction"));
+                          if (payMethod == 'wallet' &&
+                              appState.finalTotal >=
+                                  appState.myWalletBalance.value) {
+                            commonAlertNotification("Error",
+                                message: UtilsHelper.getString(context,
+                                    "add_amount_in_wallet_instruction"));
                             return;
                           }
                           if (payMethod == 'Razorpay') {
@@ -405,108 +474,127 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
                               // _handlePaymentError();
                               print(error.toString());
                             });
-                          } else if( payMethod == 'Stripe'){
-                            
-                             await StripeService.makePayment(context,
-                              CheckOut(
-                                finalAmount: appState.finalTotal,
-                                subtotal: appState.subTotal,
-                                fname: appState.userModel.name,
-                                lname: "",
-                                city:  appState.selectedPickupAddress.city ?? "surat",
-                                landmark: appState.selectedPickupAddress.note ?? "mota vara",
-                                pincode: appState.selectedPickupAddress.zipcode ?? '394101',
-                                phone: appState.userModel.phone,
-                              ),
-                             onRedirect :(){
-                               
-                             },
-                             success :(){
-                                con.orderPlaceApi(
+                          } else if (payMethod == 'Stripe') {
+                            await StripeService.makePayment(
                                 context,
-                                payMethod,
-                                setting.value.timeslots![_selectedTimeSlot].id!);
-                             },
-                             failure :(e){
-                                commonAlertNotification("Error!",message: e.toString());
-                             },
-                             cancel :(){
-                                commonAlertNotification("Error!",message: "Payment Cancelled");
-                             }
-                             );
-
-                          } else if(payMethod.toString().toLowerCase() == 'paypal'){
-                            if(appState.defaultCurrency == "USD"){
-                              Navigator.of(context).push(
+                                CheckOut(
+                                  finalAmount: appState.finalTotal,
+                                  subtotal: appState.subTotal,
+                                  fname: appState.userModel.name,
+                                  lname: "",
+                                  city: appState.selectedPickupAddress.city ??
+                                      "surat",
+                                  landmark:
+                                      appState.selectedPickupAddress.note ??
+                                          "mota vara",
+                                  pincode:
+                                      appState.selectedPickupAddress.zipcode ??
+                                          '394101',
+                                  phone: appState.userModel.phone,
+                                ),
+                                onRedirect: () {}, success: () {
+                              con.orderPlaceApi(
+                                  context,
+                                  payMethod,
+                                  setting
+                                      .value.timeslots![_selectedTimeSlot].id!);
+                            }, failure: (e) {
+                              commonAlertNotification("Error!",
+                                  message: e.toString());
+                            }, cancel: () {
+                              commonAlertNotification("Error!",
+                                  message: "Payment Cancelled");
+                            });
+                          } else if (payMethod.toString().toLowerCase() ==
+                              'paypal') {
+                            if (appState.defaultCurrency == "USD") {
+                              Navigator.of(context)
+                                  .push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => PaypalPayment(
+                                  builder: (BuildContext context) =>
+                                      PaypalPayment(
                                     onFinish: (number) async {
                                       print('order id: ' + number);
-                                      con.orderPlaceApi(context, 'Paypal', setting.value.timeslots![_selectedTimeSlot].id!);
+                                      con.orderPlaceApi(
+                                          context,
+                                          'Paypal',
+                                          setting
+                                              .value
+                                              .timeslots![_selectedTimeSlot]
+                                              .id!);
                                     },
                                     checkOut: CheckOut(
-                                        finalAmount: appState.finalTotal,
-                                        subtotal: appState.subTotal,
-                                        fname: appState.userModel.name,
-                                        lname: "",
-                                        city:  appState.selectedPickupAddress.city ?? "surat",
-                                        landmark: appState.selectedPickupAddress.note ?? "mota vara",
-                                        pincode: appState.selectedPickupAddress.zipcode ?? '394101',
-                                        phone: appState.userModel.phone,
-                                      ), // TODO: pass dynamic data
+                                      finalAmount: appState.finalTotal,
+                                      subtotal: appState.subTotal,
+                                      fname: appState.userModel.name,
+                                      lname: "",
+                                      city:
+                                          appState.selectedPickupAddress.city ??
+                                              "surat",
+                                      landmark:
+                                          appState.selectedPickupAddress.note ??
+                                              "mota vara",
+                                      pincode: appState
+                                              .selectedPickupAddress.zipcode ??
+                                          '394101',
+                                      phone: appState.userModel.phone,
+                                    ), // TODO: pass dynamic data
                                   ),
                                 ),
-                              ) .then((value) {
-                                  if (value != null) {
-                      //            con.checkOut.paypalId = value[0];
-                      //            con.checkOut.payerId = value[1];
-                      //            con.checkOut.payment = Payment(method: 'PayPal');
-                                  }
-                                });
-                              
+                              )
+                                  .then((value) {
+                                if (value != null) {
+                                  //            con.checkOut.paypalId = value[0];
+                                  //            con.checkOut.payerId = value[1];
+                                  //            con.checkOut.payment = Payment(method: 'PayPal');
+                                }
+                              });
                             } else {
-                                commonAlertNotification("Sorry",message:'PayPal not supported ${appState.defaultCurrency} currency');
+                              commonAlertNotification("Sorry",
+                                  message:
+                                      'PayPal not supported ${appState.defaultCurrency} currency');
                             }
-                          } 
-                            // con.payLabPaymentController.payPressed(
-                            //     name: appState.userModel.name ?? "",
-                            //     email:
-                            //         "email@domain.com", // TODO: We need to make it dynamic
-                            //     phone: appState.userModel.phone ?? "",
-                            //     addressLine:
-                            //         appState.selectedPickupAddress.address ??
-                            //             "",
-                            //     country:
-                            //         "US", // TODO: We need to make it dynamic
-                            //     // appState.selectedPickupAddress.country ?? "",
-                            //     city: appState.selectedPickupAddress.city ?? "",
-                            //     state:
-                            //         appState.selectedPickupAddress.state ?? "",
-                            //     zipCode:
-                            //         appState.selectedPickupAddress.zipcode ??
-                            //             "",
-                            //     amount: decimalValueWithPlaces(
-                            //         appState.finalTotal, 2),
-                            //     currencyCode: appState.defaultCurrencyCode,
-                            //     eventsCallBack: (event) {
-                            //       commonAlertNotification("Error",
-                            //           message: UtilsHelper.getString(
-                            //               context, event['message']));
-                            //       if (event["status"] == "success") {
-                            //         var transactionDetails = event["data"];
-                            //         print(transactionDetails);
-                            //       } else if (event["status"] == "error") {
-                            //         print(event);
-                            //       } else if (event["status"] == "event") {
-                            //         print(event);
-                            //       }
-                            //     });
+                          }
+                          // con.payLabPaymentController.payPressed(
+                          //     name: appState.userModel.name ?? "",
+                          //     email:
+                          //         "email@domain.com", // TODO: We need to make it dynamic
+                          //     phone: appState.userModel.phone ?? "",
+                          //     addressLine:
+                          //         appState.selectedPickupAddress.address ??
+                          //             "",
+                          //     country:
+                          //         "US", // TODO: We need to make it dynamic
+                          //     // appState.selectedPickupAddress.country ?? "",
+                          //     city: appState.selectedPickupAddress.city ?? "",
+                          //     state:
+                          //         appState.selectedPickupAddress.state ?? "",
+                          //     zipCode:
+                          //         appState.selectedPickupAddress.zipcode ??
+                          //             "",
+                          //     amount: decimalValueWithPlaces(
+                          //         appState.finalTotal, 2),
+                          //     currencyCode: appState.defaultCurrencyCode,
+                          //     eventsCallBack: (event) {
+                          //       commonAlertNotification("Error",
+                          //           message: UtilsHelper.getString(
+                          //               context, event['message']));
+                          //       if (event["status"] == "success") {
+                          //         var transactionDetails = event["data"];
+                          //         print(transactionDetails);
+                          //       } else if (event["status"] == "error") {
+                          //         print(event);
+                          //       } else if (event["status"] == "event") {
+                          //         print(event);
+                          //       }
+                          //     });
                           // }
-                           else {
+                          else {
                             con.orderPlaceApi(
                                 context,
                                 payMethod,
-                                setting.value.timeslots![_selectedTimeSlot].id!);
+                                setting
+                                    .value.timeslots![_selectedTimeSlot].id!);
                           }
                         },
                         prefixPath: 'assets/icon_arrow.svg',
@@ -550,8 +638,8 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
         child: Container(
           height: 56,
           decoration: BoxDecoration(
-            color: MyColor.coreBackgroundColor ,
-             borderRadius : BorderRadius.circular(8),
+            color: MyColor.coreBackgroundColor,
+            borderRadius: BorderRadius.circular(8),
           ),
           //  margin: const EdgeInsets.symmetric(horizontal: 27 ),s
           child: Row(
@@ -559,12 +647,11 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
             children: [
               Container(
                 width: 50,
-                  decoration: BoxDecoration(
-                  color: MyColor.commonColorSet2 ,
-                  borderRadius : BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8)
-                  ),
+                decoration: BoxDecoration(
+                  color: MyColor.commonColorSet2,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8)),
                 ),
                 child: Center(
                   child: RotatedBox(
@@ -572,10 +659,11 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
                     child: SvgPicture.asset(
                       prefixPath ?? "",
                       width: 24,
-                      colorFilter: ColorFilter.mode( 
-                        Theme.of(context).brightness == Brightness.light
-                      ?   MyColor.white  as Color :
-                       MyColor.white as Color, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).brightness == Brightness.light
+                              ? MyColor.white as Color
+                              : MyColor.white as Color,
+                          BlendMode.srcIn),
                     ),
                   ),
                 ),
@@ -601,17 +689,16 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
                                       : Colors.white,
                                 ),
                       ),
-                        // Container(
-                        //   margin: EdgeInsets.symmetric(horizontal: 6),
-                        //   child:RotatedBox(
-                        //     quarterTurns:isOpen == true ? 1 : 3,
-                        //     child:  SvgPicture.asset("assets/icon-chevron.svg",
-                        //        width: 14,
-                        //         height: 14,
-                        //       colorFilter: ColorFilter.mode(
-                        //         dark(context) ? Colors.white :MyColor.commonColorSet1 as Color, BlendMode.srcIn)),
-                        // )),
-                     
+                      // Container(
+                      //   margin: EdgeInsets.symmetric(horizontal: 6),
+                      //   child:RotatedBox(
+                      //     quarterTurns:isOpen == true ? 1 : 3,
+                      //     child:  SvgPicture.asset("assets/icon-chevron.svg",
+                      //        width: 14,
+                      //         height: 14,
+                      //       colorFilter: ColorFilter.mode(
+                      //         dark(context) ? Colors.white :MyColor.commonColorSet1 as Color, BlendMode.srcIn)),
+                      // )),
                     ],
                   ),
                 ),
@@ -645,12 +732,12 @@ class _CheckoutAndPayState extends StateMVC<CheckoutAndPay> {
 class CheckoutTile extends StatelessWidget {
   const CheckoutTile({
     super.key,
-     this.isCreditCard=false,
-     this.title,
-     this.desc,
-     this.isActive,
-     this.onPress,
-     this.lang,
+    this.isCreditCard = false,
+    this.title,
+    this.desc,
+    this.isActive,
+    this.onPress,
+    this.lang,
   });
 
   final bool isCreditCard;
@@ -667,11 +754,15 @@ class CheckoutTile extends StatelessWidget {
       child: Container(
         height: 56,
         margin: EdgeInsets.only(bottom: 12),
-        padding: EdgeInsets.only(left: 12,right: 12),
+        padding: EdgeInsets.only(left: 12, right: 12),
         decoration: BoxDecoration(
           border: Theme.of(context).brightness == Brightness.light
-           ? Border() : Border.all(width: 1,color: isActive==false ? Colors.white12 : Colors.transparent),
-          color:  MyColor.coreBackgroundColor,
+              ? Border()
+              : Border.all(
+                  width: 1,
+                  color:
+                      isActive == false ? Colors.white12 : Colors.transparent),
+          color: MyColor.coreBackgroundColor,
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
@@ -684,18 +775,21 @@ class CheckoutTile extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 12,
-                  backgroundColor:  Theme.of(context).brightness == Brightness.light
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.light
                           ? (isActive != true
                               ? MyColor.coreBackgroundColor
                               : MyColor.commonColorSet2!.withOpacity(0.2))
                           : (isActive == true
-                              ?  MyColor.commonColorSet2!.withOpacity(0.2)
+                              ? MyColor.commonColorSet2!.withOpacity(0.2)
                               : MyColor.mainColor),
                   child: Container(
                     height: 12,
                     width: 12,
                     decoration: BoxDecoration(
-                    color:isActive != true ? Colors.black.withOpacity(0.1) : MyColor.commonColorSet2,
+                      color: isActive != true
+                          ? Colors.black.withOpacity(0.1)
+                          : MyColor.commonColorSet2,
                       borderRadius: BorderRadius.all(
                         Radius.circular(12),
                       ),
@@ -703,15 +797,14 @@ class CheckoutTile extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 12),
-                Text(
-                  title ?? "",
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                Text(title ?? "",
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         fontFamily: lang == 'en' ? 'Helvetica' : 'TheSans',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).brightness == Brightness.light
-                            ?   MyColor.commonColorSet1 : MyColor.white)
-                ),
+                            ? MyColor.commonColorSet1
+                            : MyColor.white)),
               ],
             ),
             if (isCreditCard == true &&
@@ -720,9 +813,11 @@ class CheckoutTile extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 6),
                 child: SvgPicture.asset(
                   "assets/arrow_down.svg",
-                  colorFilter:ColorFilter.mode(isActive == true
-                      ? MyColor.white as Color
-                      : MyColor.textPrimaryColor as Color, BlendMode.srcIn) ,
+                  colorFilter: ColorFilter.mode(
+                      isActive == true
+                          ? MyColor.white as Color
+                          : MyColor.textPrimaryColor as Color,
+                      BlendMode.srcIn),
                 ),
               ),
             if (isCreditCard == false &&
@@ -743,7 +838,8 @@ class CheckoutTile extends StatelessWidget {
                       fontFamily: lang == 'en' ? 'Helvetica' : 'TheSans',
                       fontSize: 14,
                       color: Theme.of(context).brightness == Brightness.light
-                            ?   MyColor.commonColorSet1 : MyColor.white,
+                          ? MyColor.commonColorSet1
+                          : MyColor.white,
                       fontWeight: FontWeight.normal,
                     ),
               ),

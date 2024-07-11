@@ -3,7 +3,7 @@ class Urls {
       "https://stagincite.technofox.co.in/waterapp_1.3_version/";
   // "https://water.fluttertop.com/";
 
-  static String basicUrl = "https://www.mamasmilkfarm.com/";
+  static String basicUrl = "https://www.mamasmilkfarm.com/api";
   // 'https://stagincite.technofox.co.in/Waterapp_11_Jan_2024/';
   // static String baseUrl = '${basicUrl}api/';
   // static String baseUrl = "https://gitcsdemoserver.online/mamasmilk/api/";
